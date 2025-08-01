@@ -1,0 +1,334 @@
+/**
+ * VitalDex - Automatic Glassmorphism Tool Generator
+ * Generates tool pages from tools-config.json
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+// Load tools configuration
+let toolsConfig;
+try {
+    const configData = fs.readFileSync('./tools-config.json', 'utf8');
+    toolsConfig = JSON.parse(configData);
+} catch (error) {
+    console.error('Error loading tools-config.json:', error);
+    process.exit(1);
+}
+
+// HTML template for tool pages
+const getToolPageTemplate = (tool) => `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${tool.name} - VitalDx Glassmorphism Health Tools</title>
+    <meta name="description" content="${tool.description}">
+    <meta name="keywords" content="${tool.name}, ${tool.category}, health check, symptom checker, glassmorphism">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="${tool.name} - VitalDx">
+    <meta property="og:description" content="${tool.description}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vitaldx.vercel.app/tools/${tool.id}/">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/tools.css">
+    <link rel="stylesheet" href="../../assets/css/responsive.css">
+    <link rel="stylesheet" href="../../assets/css/performance.css">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="../../assets/js/main.js" as="script">
+    <link rel="preload" href="../../assets/js/symptom-checker.js" as="script">
+    <link rel="preload" href="./quiz-data.json" as="fetch" crossorigin="anonymous">
+    
+    <!-- PWA -->
+    <link rel="manifest" href="../../manifest.json">
+    <meta name="theme-color" content="#667eea">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        "name": "${tool.name}",
+        "description": "${tool.description}",
+        "url": "https://vitaldx.vercel.app/tools/${tool.id}/",
+        "isPartOf": {
+            "@type": "WebSite",
+            "name": "VitalDx",
+            "url": "https://vitaldx.vercel.app"
+        },
+        "about": {
+            "@type": "MedicalCondition",
+            "name": "${tool.category}"
+        },
+        "mainEntity": {
+            "@type": "MedicalTest",
+            "name": "${tool.name}",
+            "description": "${tool.description}"
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Glassmorphism Header -->
+    <header class="main-header">
+        <nav class="navbar">
+            <div class="container">
+                <div class="logo">
+                    <a href="../../">
+                        <h1>VitalDx</h1>
+                        <span class="tagline">Glassmorphism Health Tools</span>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="../../#tools" aria-current="page">Tools</a></li>
+                    <li><a href="../../blog/">Blog</a></li>
+                </ul>
+                <button class="mobile-menu-toggle" aria-expanded="false" aria-label="Toggle navigation menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Tool Page Header -->
+        <section class="tool-page-header">
+            <div class="container">
+                <div class="tool-page-icon">${tool.icon}</div>
+                <h1>${tool.name}</h1>
+                <p>${tool.description}</p>
+                <div class="tool-page-meta">
+                    <span>📝 ${tool.questions} questions</span>
+                    <span>⏱️ ${tool.estimatedTime}</span>
+                    <span>🏷️ ${toolsConfig.categories[tool.category]?.name || tool.category}</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quiz Container -->
+        <section class="quiz-section">
+            <div class="container">
+                <div class="quiz-container" data-tool="${tool.id}">
+                    <!-- Progress Bar -->
+                    <div class="quiz-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <div class="progress-text">Question 1 of ${tool.questions}</div>
+                    </div>
+
+                    <!-- Quiz Content (Generated by JavaScript) -->
+                    <div class="quiz-content">
+                        <div class="glass-loading-spinner"></div>
+                        <p style="color: white; margin-top: 1rem; text-align: center;">Loading ${tool.name}...</p>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="quiz-navigation">
+                        <button id="prevBtn" class="quiz-nav-btn" disabled>
+                            ← Previous
+                        </button>
+                        <button id="nextBtn" class="quiz-nav-btn primary" disabled>
+                            Next →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Section (Hidden by default) -->
+                <div id="resultsSection" class="quiz-results" style="display: none;">
+                    <div class="result-header">
+                        <div class="score-number">0</div>
+                        <div class="score-label">Risk Score</div>
+                        <div class="risk-level">Loading...</div>
+                    </div>
+                    
+                    <div class="result-interpretation">
+                        <h3>Your Results</h3>
+                        <ul></ul>
+                    </div>
+                    
+                    <div class="result-actions">
+                        <a href="#" class="restart-quiz btn-secondary">Take Quiz Again</a>
+                        <a href="../../" class="btn-primary">Explore More Tools</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Disclaimer -->
+        <section class="disclaimer-section">
+            <div class="container">
+                <div class="disclaimer-content">
+                    <h3>⚠️ Important Medical Disclaimer</h3>
+                    <p>This ${tool.name} is for informational purposes only and should not be used as a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Glassmorphism Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Health Tools</h4>
+                    <ul>
+                        <li><a href="../../">All Tools</a></li>
+                        <li><a href="../../#featured">Featured</a></li>
+                        <li><a href="../../blog/">Health Blog</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="../../about/">About Us</a></li>
+                        <li><a href="../../contact/">Contact</a></li>
+                        <li><a href="../../privacy/">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <ul>
+                        <li><a href="#" aria-label="Twitter">Twitter</a></li>
+                        <li><a href="#" aria-label="Facebook">Facebook</a></li>
+                        <li><a href="#" aria-label="LinkedIn">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 VitalDx. All rights reserved. | Powered by Glassmorphism Design</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/symptom-checker.js"></script>
+    <script src="../../assets/js/analytics.js"></script>
+</body>
+</html>`;
+
+// Quiz data template
+const getQuizDataTemplate = (tool) => ({
+    toolId: tool.id,
+    name: tool.name,
+    category: tool.category,
+    version: "1.0.0",
+    questions: generateSampleQuestions(tool),
+    scoring: {
+        low: {
+            min: 0,
+            max: Math.floor(tool.questions * 0.3),
+            level: "Low Risk",
+            color: "green"
+        },
+        moderate: {
+            min: Math.floor(tool.questions * 0.3) + 1,
+            max: Math.floor(tool.questions * 0.7),
+            level: "Moderate Risk", 
+            color: "orange"
+        },
+        high: {
+            min: Math.floor(tool.questions * 0.7) + 1,
+            max: tool.questions * 3,
+            level: "High Risk",
+            color: "red"
+        }
+    },
+    recommendations: {
+        low: [
+            "Your symptoms appear to be minimal. Continue monitoring your health.",
+            "Maintain healthy lifestyle habits including regular exercise and balanced nutrition.",
+            "Consider routine check-ups with your healthcare provider."
+        ],
+        moderate: [
+            "Your symptoms suggest moderate concern. Consider consulting with a healthcare professional.",
+            "Monitor your symptoms closely and seek medical advice if they worsen.",
+            "Implement stress reduction techniques and ensure adequate rest."
+        ],
+        high: [
+            "Your symptoms indicate significant concern. We strongly recommend consulting with a healthcare professional promptly.",
+            "Do not delay seeking medical attention, especially if symptoms are severe or worsening.",
+            "Keep a detailed record of your symptoms to share with your healthcare provider."
+        ]
+    },
+    autoAdvance: true,
+    showProgress: true
+});
+
+// Generate sample questions based on tool type
+function generateSampleQuestions(tool) {
+    const questions = [];
+    const questionCount = tool.questions || 10;
+
+    for (let i = 1; i <= questionCount; i++) {
+        questions.push({
+            id: i,
+            question: `Sample question ${i} for ${tool.name}`,
+            type: "multiple-choice",
+            options: [
+                { text: "Not at all", value: "none", weight: 0, icon: "✅" },
+                { text: "Slightly", value: "mild", weight: 1, icon: "⚠️" },
+                { text: "Moderately", value: "moderate", weight: 2, icon: "🔶" },
+                { text: "Severely", value: "severe", weight: 3, icon: "🔴" }
+            ]
+        });
+    }
+
+    return questions;
+}
+
+// Generate tools
+console.log('🎨 Generating glassmorphism health tools...');
+console.log(`📊 Found ${toolsConfig.tools.length} tools to generate`);
+
+let generatedCount = 0;
+let updatedCount = 0;
+
+toolsConfig.tools.forEach(tool => {
+    const toolDir = path.join('./tools', tool.id);
+    
+    // Create directory if it doesn't exist
+    if (!fs.existsSync(toolDir)) {
+        fs.mkdirSync(toolDir, { recursive: true });
+    }
+
+    // Generate HTML file
+    const htmlPath = path.join(toolDir, 'index.html');
+    const htmlContent = getToolPageTemplate(tool);
+    
+    try {
+        fs.writeFileSync(htmlPath, htmlContent, 'utf8');
+        
+        // Generate quiz data if it doesn't exist
+        const quizDataPath = path.join(toolDir, 'quiz-data.json');
+        if (!fs.existsSync(quizDataPath)) {
+            const quizData = getQuizDataTemplate(tool);
+            fs.writeFileSync(quizDataPath, JSON.stringify(quizData, null, 2), 'utf8');
+            generatedCount++;
+            console.log(`✨ Generated: ${tool.name} (${tool.id})`);
+        } else {
+            updatedCount++;
+            console.log(`🔄 Updated: ${tool.name} (${tool.id})`);
+        }
+    } catch (error) {
+        console.error(`❌ Error generating ${tool.id}:`, error);
+    }
+});
+
+console.log(`\n🎉 Tool generation complete!`);
+console.log(`✨ Generated: ${generatedCount} new tools`);
+console.log(`🔄 Updated: ${updatedCount} existing tools`);
+console.log(`📂 Total: ${toolsConfig.tools.length} glassmorphism health tools`);
+console.log(`\n🚀 Ready for Vercel deployment!`);

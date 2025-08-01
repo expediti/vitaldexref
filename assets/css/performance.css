@@ -1,0 +1,593 @@
+/* ==========================================
+VITALDEX - GLASSMORPHISM PERFORMANCE STYLESHEET
+High-Performance Glass Effects with Optimizations
+========================================== */
+
+/* Critical Path CSS - Inline Priority Styles */
+.critical-css {
+    font-display: swap;
+    contain: layout style paint;
+}
+
+/* Hardware-Accelerated Glassmorphism Base */
+.glass-element {
+    will-change: transform, opacity, backdrop-filter;
+    transform: translateZ(0); /* Force hardware acceleration */
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Enhanced Lazy Loading with Glass Effects */
+.lazy-load {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    backdrop-filter: blur(0px);
+    transition: 
+        opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        backdrop-filter 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform, backdrop-filter;
+}
+
+.lazy-load.loaded {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    backdrop-filter: blur(20px);
+}
+
+/* Premium Loading Spinner with Glassmorphism */
+.glass-loading-spinner {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    margin: 2rem auto;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: glassSpinnerFloat 3s ease-in-out infinite alternate;
+    will-change: transform;
+}
+
+.glass-loading-spinner::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 3px solid transparent;
+    border-top: 3px solid rgba(100, 181, 246, 0.8);
+    border-right: 3px solid rgba(100, 181, 246, 0.4);
+    border-radius: 50%;
+    animation: glassSpinnerRotate 1.2s linear infinite;
+    will-change: transform;
+}
+
+.glass-loading-spinner::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border: 2px solid transparent;
+    border-top: 2px solid rgba(255, 255, 255, 0.6);
+    border-left: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: glassSpinnerRotate 0.8s linear infinite reverse;
+    will-change: transform;
+}
+
+@keyframes glassSpinnerRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes glassSpinnerFloat {
+    0% { transform: translateY(0px) scale(1); }
+    100% { transform: translateY(-5px) scale(1.05); }
+}
+
+/* Glassmorphism Progress Bar */
+.glass-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.glass-progress-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(
+        90deg, 
+        rgba(100, 181, 246, 0.8) 0%, 
+        rgba(33, 150, 243, 0.9) 50%, 
+        rgba(100, 181, 246, 0.8) 100%
+    );
+    border-radius: 10px;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: progressShimmer 2s ease-in-out infinite;
+    will-change: width, transform;
+}
+
+@keyframes progressShimmer {
+    0% { transform: scaleX(1) translateX(0%); }
+    50% { transform: scaleX(1.1) translateX(2%); }
+    100% { transform: scaleX(1) translateX(0%); }
+}
+
+/* Performance-Optimized Image Loading */
+.responsive-image {
+    width: 100%;
+    height: auto;
+    background-size: cover;
+    background-position: center;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.responsive-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.responsive-image:hover::before {
+    opacity: 1;
+}
+
+.responsive-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.responsive-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Enhanced WebP Support with Performance */
+.webp-support .hero-background {
+    background-image: url('../images/hero-bg.webp');
+    background-size: cover;
+    background-attachment: fixed;
+    will-change: transform;
+}
+
+.no-webp .hero-background {
+    background-image: url('../images/hero-bg.jpg');
+    background-size: cover;
+    background-attachment: scroll; /* Better performance fallback */
+    will-change: transform;
+}
+
+/* Glass Card Loading States */
+.glass-card-loading {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    animation: glassCardPulse 2s ease-in-out infinite alternate;
+}
+
+.glass-card-loading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+    );
+    animation: glassCardShimmer 1.8s ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes glassCardPulse {
+    0% { 
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    100% { 
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+    }
+}
+
+@keyframes glassCardShimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Performance Monitoring with Glass Design */
+.perf-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: white;
+    font-size: 0.8rem;
+    z-index: 10000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: 
+        opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
+}
+
+.perf-indicator.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.perf-indicator.good {
+    border-color: rgba(76, 175, 80, 0.5);
+    color: #4CAF50;
+}
+
+.perf-indicator.needs-improvement {
+    border-color: rgba(255, 152, 0, 0.5);
+    color: #FF9800;
+}
+
+.perf-indicator.poor {
+    border-color: rgba(244, 67, 54, 0.5);
+    color: #F44336;
+}
+
+/* Core Web Vitals Optimizations */
+.above-fold {
+    contain: layout style paint;
+    content-visibility: visible;
+}
+
+.defer-offscreen {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 300px;
+    transition: opacity 0.3s ease;
+}
+
+/* Performance-Focused Font Loading */
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter.woff2') format('woff2'),
+         url('../fonts/inter.woff') format('woff');
+    font-display: swap;
+    font-weight: 400;
+    font-style: normal;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Enhanced Skip Link with Glassmorphism */
+.skip-link {
+    position: absolute;
+    top: -50px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(15px);
+    color: #fff;
+    padding: 12px 20px;
+    text-decoration: none;
+    z-index: 10000;
+    border-radius: 12px;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: top, opacity;
+}
+
+.skip-link:focus {
+    top: 20px;
+    opacity: 1;
+    transform: scale(1.02);
+}
+
+/* Enhanced Loading States with Glass Effects */
+.loading {
+    position: relative;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.15) 30%,
+        rgba(255, 255, 255, 0.3) 50%,
+        rgba(255, 255, 255, 0.15) 70%,
+        transparent 100%
+    );
+    animation: glassLoading 2s ease-in-out infinite;
+    will-change: left;
+}
+
+@keyframes glassLoading {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Skeleton Loading with Glassmorphism */
+.glass-skeleton {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    animation: glassSkeletonPulse 1.5s ease-in-out infinite alternate;
+}
+
+.glass-skeleton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+    );
+    animation: glassSkeletonShimmer 1.8s ease-in-out infinite;
+}
+
+@keyframes glassSkeletonPulse {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+@keyframes glassSkeletonShimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Intersection Observer Animations */
+.fade-in-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: 
+        opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
+}
+
+.fade-in-on-scroll.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scale-in-on-scroll {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: 
+        opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
+}
+
+.scale-in-on-scroll.in-view {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Performance-Optimized Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        backdrop-filter: none !important;
+    }
+    
+    .glass-loading-spinner,
+    .glass-progress-bar::before,
+    .loading::after,
+    .glass-skeleton::before {
+        animation: none !important;
+    }
+    
+    .lazy-load,
+    .fade-in-on-scroll,
+    .scale-in-on-scroll {
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
+
+/* High Contrast Mode with Glass Effects */
+@media (prefers-contrast: high) {
+    .glass-loading-spinner,
+    .glass-progress-bar,
+    .glass-card-loading,
+    .perf-indicator {
+        border: 3px solid rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: none;
+    }
+    
+    .skip-link {
+        border: 2px solid #fff;
+        background: #000;
+    }
+    
+    .loading {
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        backdrop-filter: none;
+    }
+}
+
+/* Dark Mode Performance Optimizations */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --glass-bg-primary: rgba(255, 255, 255, 0.05);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --glass-text: #ffffff;
+        --glass-accent: #64B5F6;
+    }
+    
+    .glass-loading-spinner {
+        background: var(--glass-bg-primary);
+        border-color: var(--glass-border);
+    }
+    
+    .glass-progress-bar {
+        background: var(--glass-bg-primary);
+        border-color: var(--glass-border);
+    }
+    
+    .glass-card-loading {
+        background: var(--glass-bg-primary);
+        border-color: var(--glass-border);
+    }
+}
+
+/* GPU Acceleration for Smooth Performance */
+.gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Optimized Focus Indicators */
+*:focus {
+    outline: 2px solid #64B5F6;
+    outline-offset: 3px;
+    border-radius: 4px;
+    transition: outline-color 0.2s ease;
+}
+
+.focus-visible {
+    outline: 2px solid #64B5F6;
+    outline-offset: 3px;
+    border-radius: 4px;
+    box-shadow: 0 0 0 4px rgba(100, 181, 246, 0.3);
+}
+
+/* Screen Reader Only Content */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Performance Budgets */
+@media (max-width: 480px) {
+    .glass-loading-spinner {
+        width: 40px;
+        height: 40px;
+        backdrop-filter: blur(10px);
+    }
+    
+    .glass-loading-spinner::before {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .glass-loading-spinner::after {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .glass-progress-bar {
+        height: 6px;
+        backdrop-filter: blur(8px);
+    }
+    
+    .responsive-image {
+        border-radius: 12px;
+    }
+}
+
+/* Connection-Aware Performance */
+@media (max-width: 768px) and (hover: none) {
+    .glass-element {
+        backdrop-filter: blur(15px); /* Reduced blur for mobile */
+    }
+    
+    .responsive-image:hover::before {
+        opacity: 0; /* Disable hover on touch devices */
+    }
+    
+    .responsive-image:hover img {
+        transform: none; /* Disable hover scaling on touch */
+    }
+}
+
+/* Battery Optimization */
+@media (prefers-reduced-motion: reduce), (update: slow) {
+    .glass-loading-spinner::before,
+    .glass-loading-spinner::after,
+    .glass-progress-bar::before {
+        animation-play-state: paused;
+    }
+    
+    .glass-element {
+        backdrop-filter: none;
+        background: rgba(255, 255, 255, 0.15);
+    }
+}

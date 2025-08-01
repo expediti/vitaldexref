@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+
+# Important pages
+Allow: /tools/
+Allow: /blog/
+
+# Sitemap location
+Sitemap: https://www.fitscan.life/sitemap.xml
+
+
+# Block admin areas (if any)
+Disallow: /admin/
+Disallow: /api/
+Disallow: /.git/
+
+# Allow all health tools and content
+Allow: /tools/
+Allow: /blog/
+Allow: /assets/
+
+
+# Crawl delay for politeness
+Crawl-delay: 1

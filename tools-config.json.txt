@@ -1,0 +1,134 @@
+{
+  "version": "1.0.0",
+  "website": "VitalDex - Glassmorphism Health Tools",
+  "lastUpdated": "2025-08-02",
+  "tools": [
+    {
+      "id": "covid-19-symptom-checker",
+      "name": "COVID-19 Symptom Checker",
+      "icon": "🦠",
+      "description": "Assess your COVID-19 symptoms with our comprehensive health check",
+      "questions": 12,
+      "estimatedTime": "3-5 minutes",
+      "category": "infectious-disease",
+      "featured": true,
+      "priority": 1
+    },
+    {
+      "id": "anxiety-symptom-checker", 
+      "name": "Anxiety Assessment",
+      "icon": "🧠",
+      "description": "Evaluate anxiety levels and get personalized recommendations",
+      "questions": 15,
+      "estimatedTime": "4-6 minutes",
+      "category": "mental-health",
+      "featured": true,
+      "priority": 2
+    },
+    {
+      "id": "asthma-symptom-checker",
+      "name": "Asthma Risk Check",
+      "icon": "🫁",
+      "description": "Monitor respiratory symptoms and asthma risk factors",
+      "questions": 10,
+      "estimatedTime": "2-4 minutes",
+      "category": "respiratory",
+      "featured": false,
+      "priority": 3
+    },
+    {
+      "id": "dizziness-symptom-checker",
+      "name": "Dizziness Evaluation",
+      "icon": "💫",
+      "description": "Assess dizziness symptoms and potential underlying causes",
+      "questions": 8,
+      "estimatedTime": "2-3 minutes",
+      "category": "neurological",
+      "featured": false,
+      "priority": 4
+    },
+    {
+      "id": "food-poisoning-symptom-checker",
+      "name": "Food Poisoning Check",
+      "icon": "🤢",
+      "description": "Evaluate digestive symptoms and food safety concerns",
+      "questions": 9,
+      "estimatedTime": "2-4 minutes",
+      "category": "digestive",
+      "featured": false,
+      "priority": 5
+    },
+    {
+      "id": "gastroenteritis-symptom-checker",
+      "name": "Gastroenteritis Assessment",
+      "icon": "🤒",
+      "description": "Check stomach flu symptoms and severity levels",
+      "questions": 11,
+      "estimatedTime": "3-5 minutes",
+      "category": "digestive",
+      "featured": false,
+      "priority": 6
+    },
+    {
+      "id": "ibs-symptom-checker",
+      "name": "IBS Symptom Tracker",
+      "icon": "💊",
+      "description": "Monitor IBS symptoms and digestive health patterns",
+      "questions": 14,
+      "estimatedTime": "4-6 minutes",
+      "category": "digestive",
+      "featured": false,
+      "priority": 7
+    },
+    {
+      "id": "uti-symptom-checker",
+      "name": "UTI Risk Assessment",
+      "icon": "🔬",
+      "description": "Evaluate urinary tract infection symptoms and risk",
+      "questions": 10,
+      "estimatedTime": "3-4 minutes",
+      "category": "urological",
+      "featured": false,
+      "priority": 8
+    }
+  ],
+  "categories": {
+    "infectious-disease": {
+      "name": "Infectious Disease",
+      "color": "255, 139, 148",
+      "icon": "🦠"
+    },
+    "mental-health": {
+      "name": "Mental Health", 
+      "color": "199, 206, 234",
+      "icon": "🧠"
+    },
+    "respiratory": {
+      "name": "Respiratory",
+      "color": "181, 234, 215", 
+      "icon": "🫁"
+    },
+    "neurological": {
+      "name": "Neurological",
+      "color": "168, 230, 207",
+      "icon": "💫"
+    },
+    "digestive": {
+      "name": "Digestive Health",
+      "color": "255, 193, 203",
+      "icon": "🤒"
+    },
+    "urological": {
+      "name": "Urological",
+      "color": "187, 222, 251",
+      "icon": "🔬"
+    }
+  },
+  "settings": {
+    "autoAdvance": true,
+    "showProgress": true,
+    "enableGlassmorphism": true,
+    "mobileOptimized": true,
+    "accessibilityEnabled": true
+  }
+}

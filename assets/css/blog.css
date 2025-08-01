@@ -1,0 +1,779 @@
+/* ==========================================
+VITALDEX - GLASSMORPHISM BLOG STYLESHEET
+========================================== */
+
+/* Enhanced Blog Hero with Glassmorphism */
+.blog-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 6rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.blog-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+    animation: blogHeroFloat 15s ease-in-out infinite alternate;
+}
+
+@keyframes blogHeroFloat {
+    0% { transform: translateY(0px) rotate(0deg); }
+    100% { transform: translateY(-15px) rotate(1deg); }
+}
+
+.blog-hero h1 {
+    font-size: 3.2rem;
+    margin-bottom: 1.5rem;
+    font-weight: 800;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s ease-out;
+}
+
+.blog-hero p {
+    font-size: 1.3rem;
+    margin-bottom: 3rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0.95;
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+/* Glassmorphism Search Box */
+.search-box {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s ease-out 0.4s both;
+    transition: all 0.3s ease;
+}
+
+.search-box:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.search-box input {
+    flex: 1;
+    padding: 1.2rem 2rem;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    outline: none;
+    color: white;
+    font-weight: 500;
+}
+
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.search-box button {
+    background: rgba(33, 150, 243, 0.8);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: none;
+    padding: 1.2rem 2rem;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.search-box button:hover {
+    background: rgba(33, 150, 243, 1);
+    transform: scale(1.05);
+}
+
+/* Featured Articles with Glass Cards */
+.featured-articles {
+    padding: 8rem 0;
+    background: transparent;
+    position: relative;
+}
+
+.featured-articles h2 {
+    text-align: center;
+    margin-bottom: 4rem;
+    font-size: 2.8rem;
+    color: white;
+    font-weight: 700;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 2.5rem;
+}
+
+/* Premium Glassmorphism Featured Cards */
+.featured-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(25px);
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    cursor: pointer;
+}
+
+.featured-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transition: left 0.6s ease;
+    z-index: 1;
+}
+
+.featured-card:hover::before {
+    left: 100%;
+}
+
+.featured-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.25),
+        0 8px 32px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.card-image {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    filter: brightness(0.9);
+}
+
+.featured-card:hover .card-image img {
+    transform: scale(1.08);
+    filter: brightness(1);
+}
+
+.card-content {
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Enhanced Category Tags */
+.category {
+    display: inline-block;
+    background: rgba(33, 150, 243, 0.2);
+    backdrop-filter: blur(10px);
+    color: #64B5F6;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(100, 181, 246, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.featured-card:hover .category {
+    background: rgba(33, 150, 243, 0.3);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: scale(1.05);
+}
+
+.card-content h3 {
+    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    line-height: 1.4;
+    font-weight: 700;
+}
+
+.card-content h3 a {
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.card-content h3 a:hover {
+    color: #64B5F6;
+    text-shadow: 0 2px 8px rgba(100, 181, 246, 0.3);
+}
+
+.card-content p {
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.article-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.article-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.article-meta span::before {
+    content: '📅';
+    font-size: 0.8rem;
+}
+
+.article-meta span:nth-child(2)::before {
+    content: '⏱️';
+}
+
+/* Blog Main Layout */
+.blog-main {
+    padding: 6rem 0;
+}
+
+.blog-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4rem;
+    align-items: start;
+}
+
+.articles-grid h2 {
+    margin-bottom: 3rem;
+    font-size: 2.2rem;
+    color: white;
+    font-weight: 700;
+}
+
+/* Blog Cards with Glassmorphism */
+.blog-card {
+    display: flex;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.5rem;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.blog-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.blog-card:hover::after {
+    opacity: 1;
+}
+
+.blog-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+}
+
+.blog-card .card-image {
+    width: 200px;
+    height: 150px;
+    flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.blog-card .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    filter: brightness(0.9);
+}
+
+.blog-card:hover .card-image img {
+    transform: scale(1.05);
+    filter: brightness(1);
+}
+
+.blog-card .card-content {
+    flex: 1;
+    padding: 2rem;
+}
+
+.blog-card .card-content h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+    color: white;
+    font-weight: 700;
+}
+
+.blog-card .card-content h3 a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.blog-card .card-content h3 a:hover {
+    color: #64B5F6;
+}
+
+.blog-card .card-content p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+/* Glassmorphism Sidebar */
+.blog-sidebar {
+    padding: 0;
+}
+
+.sidebar-widget {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.sidebar-widget:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-3px);
+}
+
+.sidebar-widget h3 {
+    margin-bottom: 2rem;
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.category-list, .tools-list {
+    list-style: none;
+    padding: 0;
+}
+
+.category-list li, .tools-list li {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.category-list li:last-child, .tools-list li:last-child {
+    border-bottom: none;
+}
+
+.category-list li:hover, .tools-list li:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding-left: 1.5rem;
+    margin: 0 -0.5rem;
+}
+
+.category-list a, .tools-list a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.category-list a:hover, .tools-list a:hover {
+    color: #64B5F6;
+    text-decoration: none;
+}
+
+.category-list span {
+    background: rgba(100, 181, 246, 0.2);
+    color: #64B5F6;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid rgba(100, 181, 246, 0.3);
+}
+
+/* Enhanced Health Tips */
+.health-tips {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.tip-item {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 4px solid #64B5F6;
+    transition: all 0.3s ease;
+}
+
+.tip-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateX(8px);
+    border-left-color: #42A5F5;
+}
+
+.tip-item h4 {
+    margin-bottom: 0.8rem;
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.tip-item p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Glassmorphism Newsletter */
+.newsletter-signup {
+    background: linear-gradient(135deg, #2196F3 0%, #21CBF3 100%);
+    color: white;
+    padding: 6rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.newsletter-signup::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+    animation: newsletterFloat 18s ease-in-out infinite alternate;
+}
+
+@keyframes newsletterFloat {
+    0% { transform: scale(1) rotate(0deg); }
+    100% { transform: scale(1.05) rotate(1deg); }
+}
+
+.newsletter-content {
+    position: relative;
+    z-index: 2;
+}
+
+.newsletter-content h2 {
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    font-weight: 800;
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.newsletter-content p {
+    margin-bottom: 3rem;
+    font-size: 1.2rem;
+    opacity: 0.95;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.newsletter-form {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.newsletter-form:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: 1.2rem 2rem;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    outline: none;
+    color: white;
+    font-weight: 500;
+}
+
+.newsletter-form input::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.newsletter-form button {
+    background: rgba(25, 118, 210, 0.8);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: none;
+    padding: 1.2rem 2.5rem;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    font-size: 1rem;
+}
+
+.newsletter-form button:hover {
+    background: rgba(25, 118, 210, 1);
+    transform: scale(1.05);
+}
+
+.privacy-note {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Enhanced Responsive Design */
+@media (max-width: 968px) {
+    .blog-layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .featured-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .blog-card {
+        flex-direction: column;
+    }
+
+    .blog-card .card-image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .search-box, .newsletter-form {
+        flex-direction: column;
+        border-radius: 16px;
+    }
+
+    .search-box button, .newsletter-form button {
+        border-radius: 0 0 16px 16px;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+}
+
+@media (max-width: 768px) {
+    .blog-hero {
+        padding: 4rem 0;
+    }
+
+    .blog-hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .blog-hero p {
+        font-size: 1.1rem;
+    }
+
+    .featured-articles {
+        padding: 4rem 0;
+    }
+
+    .featured-articles h2 {
+        font-size: 2.2rem;
+    }
+
+    .blog-main {
+        padding: 4rem 0;
+    }
+
+    .blog-layout {
+        gap: 2rem;
+    }
+
+    .sidebar-widget {
+        padding: 2rem;
+    }
+
+    .newsletter-signup {
+        padding: 4rem 0;
+    }
+
+    .newsletter-content h2 {
+        font-size: 2rem;
+    }
+
+    .featured-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .featured-card {
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-hero {
+        padding: 3rem 0;
+    }
+
+    .blog-hero h1 {
+        font-size: 2rem;
+    }
+
+    .featured-articles,
+    .blog-main,
+    .newsletter-signup {
+        padding: 3rem 0;
+    }
+
+    .card-content {
+        padding: 1.5rem;
+    }
+
+    .blog-card .card-content {
+        padding: 1.5rem;
+    }
+
+    .sidebar-widget {
+        padding: 1.5rem;
+    }
+
+    .article-meta {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: flex-start;
+    }
+
+    .search-box, .newsletter-form {
+        margin: 0 1rem;
+    }
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Accessibility Enhancements */
+@media (prefers-reduced-motion: reduce) {
+    .featured-card,
+    .blog-card,
+    .sidebar-widget,
+    .tip-item,
+    .search-box,
+    .newsletter-form {
+        transition: none;
+        animation: none;
+    }
+
+    .blog-hero::before,
+    .newsletter-signup::before {
+        animation: none;
+    }
+
+    .featured-card:hover,
+    .blog-card:hover {
+        transform: none;
+    }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .featured-card,
+    .blog-card,
+    .sidebar-widget {
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .search-box,
+    .newsletter-form {
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.2);
+    }
+}
