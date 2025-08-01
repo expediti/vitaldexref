@@ -1,6 +1,6 @@
 /**
- * VitalDex - Enhanced Glassmorphism Symptom Checker Quiz Engine
- * Handles quiz functionality with beautiful glass effects and smooth animations
+ * VitalDex - Beautiful One-by-One Glassmorphism Quiz
+ * Each question appears in its own stunning glass card
  */
 
 class SymptomChecker {
@@ -11,765 +11,364 @@ class SymptomChecker {
         this.answers = {};
         this.totalScore = 0;
         this.isQuizCompleted = false;
-        this.animationDuration = 600;
-        this.glassEffects = {
-            enabled: !window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-            intensity: this.getGlassIntensity()
-        };
         this.init();
-    }
-
-    /**
-     * Determine glass effect intensity based on device capability
-     */
-    getGlassIntensity() {
-        const isLowEndDevice = navigator.hardwareConcurrency <= 4 || 
-                              navigator.connection?.effectiveType === 'slow-2g' ||
-                              navigator.connection?.effectiveType === '2g';
-        return isLowEndDevice ? 'low' : 'high';
     }
 
     async init() {
         try {
-            this.showGlassLoadingState();
+            this.showLoadingSpinner();
             await this.loadQuizData();
-            this.setupGlassmorphismEnvironment();
+            this.setupQuizContainer();
+            this.showSingleQuestion(0);
             this.setupEventListeners();
-            await this.showQuestion(0);
-            this.updateProgress();
-            this.hideGlassLoadingState();
-            console.log(`${this.toolName} glassmorphism quiz initialized`);
+            this.hideLoadingSpinner();
         } catch (error) {
             console.error('Quiz initialization failed:', error);
-            this.hideGlassLoadingState();
-            this.showError('Failed to load quiz data. Please refresh the page.');
-        }
-    }
-
-    /**
-     * Setup glassmorphism environment and effects
-     */
-    setupGlassmorphismEnvironment() {
-        // Add glass classes to quiz elements
-        const quizContainer = document.querySelector('.quiz-container');
-        if (quizContainer) {
-            quizContainer.classList.add('glass-quiz-container');
-            quizContainer.style.cssText += `
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(${this.glassEffects.intensity === 'high' ? '25px' : '15px'});
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-radius: 24px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-                position: relative;
-                overflow: hidden;
-            `;
-
-            // Add floating glass particles for enhanced effect
-            if (this.glassEffects.enabled && this.glassEffects.intensity === 'high') {
-                this.createQuizGlassParticles(quizContainer);
-            }
-        }
-
-        // Style progress bar with glassmorphism
-        const progressBar = document.querySelector('.progress-bar');
-        if (progressBar) {
-            progressBar.style.cssText += `
-                background: rgba(255, 255, 255, 0.1);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-radius: 12px;
-                overflow: hidden;
-                box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-            `;
-        }
-
-        const progressFill = document.querySelector('.progress-fill');
-        if (progressFill) {
-            progressFill.style.cssText += `
-                background: linear-gradient(90deg, 
-                    rgba(100, 181, 246, 0.8) 0%, 
-                    rgba(33, 150, 243, 0.9) 50%, 
-                    rgba(100, 181, 246, 0.8) 100%);
-                box-shadow: 0 2px 8px rgba(100, 181, 246, 0.3);
-                transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            `;
-        }
-    }
-
-    /**
-     * Create floating glass particles for quiz
-     */
-    createQuizGlassParticles(container) {
-        const particleContainer = document.createElement('div');
-        particleContainer.className = 'quiz-glass-particles';
-        particleContainer.style.cssText = `
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
-        `;
-
-        for (let i = 0; i < 8; i++) {
-            const particle = document.createElement('div');
-            particle.style.cssText = `
-                position: absolute;
-                width: ${Math.random() * 3 + 1}px;
-                height: ${Math.random() * 3 + 1}px;
-                background: rgba(255, 255, 255, ${Math.random() * 0.4 + 0.1});
-                border-radius: 50%;
-                animation: quizParticleFloat ${Math.random() * 15 + 10}s infinite linear;
-                left: ${Math.random() * 100}%;
-                top: ${Math.random() * 100}%;
-            `;
-            particleContainer.appendChild(particle);
-        }
-
-        // Add particle animation
-        if (!document.getElementById('quiz-particle-styles')) {
-            const style = document.createElement('style');
-            style.id = 'quiz-particle-styles';
-            style.textContent = `
-                @keyframes quizParticleFloat {
-                    0% { transform: translateY(0px) translateX(0px) rotate(0deg); opacity: 0; }
-                    10% { opacity: 1; }
-                    90% { opacity: 1; }
-                    100% { transform: translateY(-50px) translateX(25px) rotate(180deg); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-
-        container.appendChild(particleContainer);
-    }
-
-    /**
-     * Show glass loading state
-     */
-    showGlassLoadingState() {
-        const quizContainer = document.querySelector('.quiz-container');
-        if (!quizContainer) return;
-
-        const loadingOverlay = document.createElement('div');
-        loadingOverlay.className = 'glass-quiz-loading';
-        loadingOverlay.innerHTML = `
-            <div class="glass-loading-spinner"></div>
-            <p style="color: white; margin-top: 1rem; font-weight: 600;">Loading ${this.toolName}...</p>
-        `;
-        loadingOverlay.style.cssText = `
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            border-radius: 24px;
-        `;
-
-        quizContainer.appendChild(loadingOverlay);
-    }
-
-    /**
-     * Hide glass loading state
-     */
-    hideGlassLoadingState() {
-        const loadingOverlay = document.querySelector('.glass-quiz-loading');
-        if (loadingOverlay) {
-            loadingOverlay.style.opacity = '0';
-            loadingOverlay.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                if (loadingOverlay.parentNode) {
-                    loadingOverlay.parentNode.removeChild(loadingOverlay);
-                }
-            }, 300);
+            this.showError('Failed to load quiz. Please refresh the page.');
         }
     }
 
     async loadQuizData() {
-        try {
-            const response = await fetch('./quiz-data.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            this.quizData = await response.json();
-
-            // Validate quiz data
-            if (!this.quizData || !this.quizData.questions || this.quizData.questions.length === 0) {
-                throw new Error('Invalid quiz data structure');
-            }
-        } catch (error) {
-            console.error('Error loading quiz data:', error);
-            throw error;
+        // Load quiz data from your existing quiz-data.json
+        const response = await fetch('./quiz-data.json');
+        this.quizData = await response.json();
+        
+        // If no quiz data, create sample data
+        if (!this.quizData || !this.quizData.questions) {
+            this.quizData = this.createSampleQuizData();
         }
     }
 
-    setupEventListeners() {
-        // Enhanced navigation buttons with glassmorphism
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        
-        if (prevBtn) {
-            this.enhanceGlassButton(prevBtn);
-            prevBtn.addEventListener('click', () => this.previousQuestion());
-        }
-        
-        if (nextBtn) {
-            this.enhanceGlassButton(nextBtn);
-            nextBtn.addEventListener('click', () => this.nextQuestion());
-        }
-
-        // Enhanced keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (e.target.closest('.quiz-content')) {
-                switch(e.key) {
-                    case 'ArrowLeft':
-                        if (this.currentQuestion > 0) {
-                            this.addKeyboardFeedback('previous');
-                            this.previousQuestion();
-                        }
-                        break;
-                    case 'ArrowRight':
-                        if (this.canProceed()) {
-                            this.addKeyboardFeedback('next');
-                            this.nextQuestion();
-                        }
-                        break;
-                    case 'Enter':
-                        if (this.canProceed()) {
-                            this.addKeyboardFeedback('enter');
-                            this.nextQuestion();
-                        }
-                        break;
+    createSampleQuizData() {
+        return {
+            questions: [
+                {
+                    id: 1,
+                    question: "Do you have body aches, fatigue, or feel generally unwell?",
+                    type: "multiple-choice",
+                    options: [
+                        { text: "Severe fatigue and body aches", value: "severe", weight: 3, icon: "🔴", color: "#FF5252" },
+                        { text: "Moderate fatigue and some aches", value: "moderate", weight: 2, icon: "🟡", color: "#FFC107" },
+                        { text: "Mild fatigue", value: "mild", weight: 1, icon: "🟢", color: "#4CAF50" },
+                        { text: "Feeling normal", value: "normal", weight: 0, icon: "✅", color: "#00BCD4" }
+                    ]
+                },
+                {
+                    id: 2,
+                    question: "Do you have a sore throat or runny nose?",
+                    type: "multiple-choice",
+                    options: [
+                        { text: "Both sore throat and runny nose", value: "both", weight: 3, icon: "🤧", color: "#FF5252" },
+                        { text: "Sore throat only", value: "sore_throat", weight: 2, icon: "😷", color: "#FF9800" },
+                        { text: "Runny nose only", value: "runny_nose", weight: 2, icon: "🤧", color: "#FF9800" },
+                        { text: "Neither", value: "neither", weight: 0, icon: "😊", color: "#4CAF50" }
+                    ]
+                },
+                {
+                    id: 3,
+                    question: "Have you been in close contact with someone confirmed to have COVID-19?",
+                    type: "multiple-choice",
+                    options: [
+                        { text: "Yes, confirmed close contact", value: "confirmed", weight: 3, icon: "⚠️", color: "#F44336" },
+                        { text: "Possible contact / unsure", value: "possible", weight: 2, icon: "🤔", color: "#FF9800" },
+                        { text: "No known contact", value: "no_contact", weight: 0, icon: "✅", color: "#4CAF50" }
+                    ]
+                },
+                {
+                    id: 4,
+                    question: "When did your symptoms first appear?",
+                    type: "multiple-choice",
+                    options: [
+                        { text: "Today", value: "today", weight: 3, icon: "🕐", color: "#E91E63" },
+                        { text: "1-3 days ago", value: "recent", weight: 2, icon: "📅", color: "#FF9800" },
+                        { text: "4-7 days ago", value: "week", weight: 2, icon: "📆", color: "#FF9800" },
+                        { text: "More than a week ago", value: "old", weight: 1, icon: "📋", color: "#2196F3" },
+                        { text: "I don't have symptoms", value: "none", weight: 0, icon: "😊", color: "#4CAF50" }
+                    ]
                 }
+            ],
+            scoring: {
+                low: { min: 0, max: 3, level: "Low Risk", color: "#4CAF50" },
+                moderate: { min: 4, max: 7, level: "Moderate Risk", color: "#FF9800" },
+                high: { min: 8, max: 12, level: "High Risk", color: "#F44336" }
             }
-        });
-
-        // Enhanced answer selection with glass effects
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.answer-btn')) {
-                this.selectAnswer(e.target.closest('.answer-btn'));
-            }
-            if (e.target.closest('.scale-btn')) {
-                this.selectScaleAnswer(e.target.closest('.scale-btn'));
-            }
-        });
-
-        // Restart quiz with glass transition
-        document.addEventListener('click', (e) => {
-            if (e.target.closest('.restart-quiz')) {
-                e.preventDefault();
-                this.restartQuizWithGlassTransition();
-            }
-        });
-    }
-
-    /**
-     * Enhance button with glassmorphism effects
-     */
-    enhanceGlassButton(button) {
-        button.style.cssText += `
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            color: white;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        `;
-
-        // Add shimmer effect on hover
-        button.addEventListener('mouseenter', function() {
-            if (window.matchMedia('(hover: hover)').matches) {
-                this.style.background = 'rgba(255, 255, 255, 0.25)';
-                this.style.transform = 'translateY(-2px)';
-                this.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.2)';
-            }
-        });
-
-        button.addEventListener('mouseleave', function() {
-            if (window.matchMedia('(hover: hover)').matches) {
-                this.style.background = 'rgba(255, 255, 255, 0.15)';
-                this.style.transform = '';
-                this.style.boxShadow = '';
-            }
-        });
-
-        // Touch feedback for mobile
-        button.addEventListener('touchstart', function() {
-            this.style.transform = 'scale(0.96)';
-        }, { passive: true });
-
-        button.addEventListener('touchend', function() {
-            setTimeout(() => {
-                this.style.transform = '';
-            }, 150);
-        }, { passive: true });
-    }
-
-    /**
-     * Add keyboard interaction feedback
-     */
-    addKeyboardFeedback(action) {
-        const quizContainer = document.querySelector('.quiz-container');
-        if (!quizContainer) return;
-
-        const feedback = document.createElement('div');
-        feedback.className = 'keyboard-feedback';
-        feedback.style.cssText = `
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(100, 181, 246, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(100, 181, 246, 0.4);
-            border-radius: 8px;
-            padding: 8px 12px;
-            color: white;
-            font-size: 0.8rem;
-            font-weight: 600;
-            z-index: 1000;
-            opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.3s ease;
-        `;
-
-        const actionText = {
-            'previous': '← Previous',
-            'next': '→ Next',
-            'enter': '✓ Continue'
         };
-
-        feedback.textContent = actionText[action] || action;
-        quizContainer.appendChild(feedback);
-
-        requestAnimationFrame(() => {
-            feedback.style.opacity = '1';
-            feedback.style.transform = 'scale(1)';
-        });
-
-        setTimeout(() => {
-            feedback.style.opacity = '0';
-            feedback.style.transform = 'scale(0.8)';
-            setTimeout(() => {
-                if (feedback.parentNode) {
-                    feedback.parentNode.removeChild(feedback);
-                }
-            }, 300);
-        }, 1500);
     }
 
-    async showQuestion(index) {
-        if (!this.quizData || index >= this.quizData.questions.length) {
-            return;
-        }
+    setupQuizContainer() {
+        const quizContent = document.querySelector('.quiz-content');
+        if (!quizContent) return;
 
-        const currentQuestionElement = document.querySelector('.question.active');
+        // Clear existing content
+        quizContent.innerHTML = `
+            <div class="quiz-progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="progress-text">Question 1 of ${this.quizData.questions.length}</div>
+            </div>
+            <div class="single-question-container">
+                <!-- Question will be dynamically inserted here -->
+            </div>
+            <div class="quiz-navigation">
+                <button id="prevBtn" class="quiz-nav-btn secondary" disabled>
+                    <span>←</span> Previous
+                </button>
+                <button id="nextBtn" class="quiz-nav-btn primary" disabled>
+                    Next <span>→</span>
+                </button>
+            </div>
+        `;
+
+        // Apply glassmorphism styling to container
+        const quizContainer = document.querySelector('.quiz-container');
+        if (quizContainer) {
+            quizContainer.style.cssText += `
+                background: rgba(255, 255, 255, 0.1);
+                backdrop-filter: blur(25px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 24px;
+                padding: 3rem;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+                position: relative;
+                overflow: hidden;
+            `;
+        }
+    }
+
+    async showSingleQuestion(index) {
+        if (!this.quizData || index >= this.quizData.questions.length) return;
+
+        const question = this.quizData.questions[index];
+        const container = document.querySelector('.single-question-container');
         
-        // Animate out current question
-        if (currentQuestionElement && this.glassEffects.enabled) {
-            await this.animateQuestionOut(currentQuestionElement);
+        if (!container) return;
+
+        // Animate out current question if exists
+        const existingCard = container.querySelector('.question-card');
+        if (existingCard) {
+            await this.animateQuestionOut(existingCard);
         }
 
-        // Hide all questions
-        document.querySelectorAll('.question').forEach(q => {
-            q.classList.remove('active');
-        });
+        // Create new question card
+        const questionCard = this.createQuestionCard(question, index);
+        container.innerHTML = '';
+        container.appendChild(questionCard);
 
-        // Show new question
-        let questionElement = document.querySelector(`.question[data-question="${index + 1}"]`);
-        if (questionElement) {
-            questionElement.classList.add('active');
-            if (this.glassEffects.enabled) {
-                await this.animateQuestionIn(questionElement);
-            }
-        } else {
-            // Generate question dynamically
-            questionElement = this.generateQuestion(index);
-            if (this.glassEffects.enabled) {
-                await this.animateQuestionIn(questionElement);
-            }
-        }
+        // Animate in new question
+        await this.animateQuestionIn(questionCard);
 
-        // Focus management for accessibility
-        const firstAnswer = questionElement?.querySelector('.answer-btn, .scale-btn');
-        if (firstAnswer) {
-            setTimeout(() => firstAnswer.focus(), 200);
-        }
-
+        // Update progress
         this.updateProgress();
         this.updateNavigationButtons();
     }
 
-    /**
-     * Animate question out with glass effects
-     */
-    animateQuestionOut(element) {
+    createQuestionCard(question, index) {
+        const card = document.createElement('div');
+        card.className = 'question-card glass-question-card';
+        
+        // Apply beautiful glassmorphism styling
+        card.style.cssText = `
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        `;
+
+        // Add floating gradient background
+        const gradient = document.createElement('div');
+        gradient.style.cssText = `
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(100, 181, 246, 0.1), transparent);
+            animation: rotate 15s linear infinite;
+            pointer-events: none;
+        `;
+        card.appendChild(gradient);
+
+        // Question content
+        const content = document.createElement('div');
+        content.className = 'question-content';
+        content.style.cssText = `
+            position: relative;
+            z-index: 2;
+        `;
+
+        content.innerHTML = `
+            <div class="question-header">
+                <div class="question-number">
+                    <span class="q-num">${index + 1}</span>
+                    <span class="q-total">/ ${this.quizData.questions.length}</span>
+                </div>
+                <h3 class="question-title">${question.question}</h3>
+            </div>
+            <div class="question-options">
+                ${question.options.map((option, optIndex) => `
+                    <button class="glass-option-btn" 
+                            data-value="${option.value}" 
+                            data-weight="${option.weight}"
+                            data-question="${index}"
+                            style="
+                                background: rgba(255, 255, 255, 0.08);
+                                backdrop-filter: blur(15px);
+                                border: 2px solid rgba(255, 255, 255, 0.15);
+                                border-radius: 16px;
+                                padding: 1.2rem 1.5rem;
+                                margin-bottom: 1rem;
+                                width: 100%;
+                                text-align: left;
+                                color: white;
+                                font-size: 1rem;
+                                font-weight: 500;
+                                cursor: pointer;
+                                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+                                display: flex;
+                                align-items: center;
+                                gap: 1rem;
+                                position: relative;
+                                overflow: hidden;
+                                opacity: 0;
+                                transform: translateX(-20px);
+                                animation: slideInOption 0.6s ease-out ${optIndex * 0.1}s forwards;
+                            "
+                            onmouseover="this.style.background='rgba(${this.hexToRgb(option.color)}, 0.15)'; this.style.borderColor='rgba(${this.hexToRgb(option.color)}, 0.4)'; this.style.transform='translateX(8px) scale(1.02)';"
+                            onmouseout="if(!this.classList.contains('selected')) { this.style.background='rgba(255, 255, 255, 0.08)'; this.style.borderColor='rgba(255, 255, 255, 0.15)'; this.style.transform=''; }"
+                            onclick="this.parentElement.parentElement.parentElement.parentElement.querySelector('.symptom-checker').selectOption(this)">
+                        <span class="option-icon" style="font-size: 1.5rem;">${option.icon}</span>
+                        <span class="option-text">${option.text}</span>
+                        <span class="option-checkmark" style="margin-left: auto; opacity: 0; transition: all 0.3s ease;">✓</span>
+                    </button>
+                `).join('')}
+            </div>
+        `;
+
+        card.appendChild(content);
+
+        // Add rotation animation keyframes if not exist
+        if (!document.getElementById('rotate-animation')) {
+            const style = document.createElement('style');
+            style.id = 'rotate-animation';
+            style.textContent = `
+                @keyframes rotate {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+                @keyframes slideInOption {
+                    to {
+                        opacity: 1;
+                        transform: translateX(0);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        return card;
+    }
+
+    hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? 
+            parseInt(result[1], 16) + ", " + parseInt(result[2], 16) + ", " + parseInt(result[3], 16)
+            : "255, 255, 255";
+    }
+
+    async animateQuestionOut(element) {
         return new Promise(resolve => {
-            element.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-            element.style.transform = 'translateX(-30px) scale(0.95)';
+            element.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            element.style.transform = 'translateX(-50px) scale(0.95)';
             element.style.opacity = '0';
             element.style.filter = 'blur(5px)';
-
-            setTimeout(resolve, 400);
+            setTimeout(resolve, 500);
         });
     }
 
-    /**
-     * Animate question in with glass effects
-     */
-    animateQuestionIn(element) {
+    async animateQuestionIn(element) {
         return new Promise(resolve => {
-            // Set initial state
-            element.style.transform = 'translateX(30px) scale(0.95)';
-            element.style.opacity = '0';
-            element.style.filter = 'blur(5px)';
-            element.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-
             requestAnimationFrame(() => {
-                element.style.transform = 'translateX(0) scale(1)';
+                element.style.transform = 'translateY(0)';
                 element.style.opacity = '1';
-                element.style.filter = 'blur(0px)';
             });
-
             setTimeout(resolve, 600);
         });
     }
 
-    generateQuestion(index) {
-        const question = this.quizData.questions[index];
-        const quizContent = document.querySelector('.quiz-content');
-        if (!quizContent || !question) return null;
+    setupEventListeners() {
+        // Navigation buttons
+        document.getElementById('prevBtn')?.addEventListener('click', () => this.previousQuestion());
+        document.getElementById('nextBtn')?.addEventListener('click', () => this.nextQuestion());
 
-        // Clear existing questions
-        quizContent.innerHTML = '';
-
-        const questionDiv = document.createElement('div');
-        questionDiv.className = 'question active glass-question';
-        questionDiv.setAttribute('data-question', index + 1);
-
-        // Apply glassmorphism to question container
-        questionDiv.style.cssText = `
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 20px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
-        `;
-
-        let optionsHTML = '';
-        if (question.type === 'scale') {
-            optionsHTML = `
-                <div class="scale-options">
-                    ${Array.from({length: question.scale || 5}, (_, i) => {
-                        const value = i + 1;
-                        return `
-                            <button class="scale-btn glass-scale-btn" 
-                                    data-value="${value}" 
-                                    data-weight="${value}"
-                                    aria-label="Scale option ${value}">
-                                ${value}
-                            </button>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-        } else {
-            optionsHTML = question.options.map(option => `
-                <button class="answer-btn glass-answer-btn" 
-                        data-value="${option.value}" 
-                        data-weight="${option.weight}"
-                        aria-label="${option.text}">
-                    <span class="icon">${option.icon || '•'}</span>
-                    <span class="text">${option.text}</span>
-                </button>
-            `).join('');
-        }
-
-        questionDiv.innerHTML = `
-            <h3 class="question-title">${question.question}</h3>
-            ${question.description ? `<p class="question-description">${question.description}</p>` : ''}
-            <div class="answer-options">
-                ${optionsHTML}
-            </div>
-        `;
-
-        quizContent.appendChild(questionDiv);
-
-        // Apply glassmorphism to answer buttons
-        this.applyGlassEffectsToAnswerButtons(questionDiv);
-
-        return questionDiv;
-    }
-
-    /**
-     * Apply glassmorphism effects to answer buttons
-     */
-    applyGlassEffectsToAnswerButtons(container) {
-        const buttons = container.querySelectorAll('.answer-btn, .scale-btn');
-        
-        buttons.forEach((button, index) => {
-            // Apply glass styling
-            button.style.cssText += `
-                background: rgba(255, 255, 255, 0.08);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                border-radius: 12px;
-                color: rgba(255, 255, 255, 0.9);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                position: relative;
-                overflow: hidden;
-                animation-delay: ${index * 0.1}s;
-            `;
-
-            // Add staggered entrance animation
-            if (this.glassEffects.enabled) {
-                button.style.opacity = '0';
-                button.style.transform = 'translateY(20px)';
-                
-                setTimeout(() => {
-                    button.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
-                    button.style.opacity = '1';
-                    button.style.transform = 'translateY(0)';
-                }, index * 100);
-            }
-
-            // Enhanced hover effects
-            button.addEventListener('mouseenter', function() {
-                if (window.matchMedia('(hover: hover)').matches) {
-                    this.style.background = 'rgba(255, 255, 255, 0.15)';
-                    this.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-                    this.style.transform = 'translateY(-2px) scale(1.02)';
-                    this.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.2)';
-                }
-            });
-
-            button.addEventListener('mouseleave', function() {
-                if (!this.classList.contains('selected') && window.matchMedia('(hover: hover)').matches) {
-                    this.style.background = 'rgba(255, 255, 255, 0.08)';
-                    this.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                    this.style.transform = '';
-                    this.style.boxShadow = '';
-                }
-            });
-
-            // Touch feedback
-            button.addEventListener('touchstart', function() {
-                this.style.transform = 'scale(0.96)';
-            }, { passive: true });
-
-            button.addEventListener('touchend', function() {
-                setTimeout(() => {
-                    if (!this.classList.contains('selected')) {
-                        this.style.transform = '';
-                    }
-                }, 150);
-            }, { passive: true });
-        });
-    }
-
-    selectAnswer(button) {
-        if (!button) return;
-
-        const questionDiv = button.closest('.question');
-        const questionIndex = parseInt(questionDiv.dataset.question) - 1;
-
-        // Animate selection with glass effects
-        this.animateAnswerSelection(button, questionDiv);
-
-        // Clear previous selections
-        questionDiv.querySelectorAll('.answer-btn').forEach(btn => {
-            btn.classList.remove('selected');
-            btn.setAttribute('aria-selected', 'false');
-            if (btn !== button) {
-                btn.style.background = 'rgba(255, 255, 255, 0.08)';
-                btn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-                btn.style.transform = '';
-                btn.style.boxShadow = '';
-            }
-        });
-
-        // Select current answer with enhanced glass effect
-        button.classList.add('selected');
-        button.setAttribute('aria-selected', 'true');
-        button.style.background = 'rgba(100, 181, 246, 0.2)';
-        button.style.borderColor = 'rgba(100, 181, 246, 0.5)';
-        button.style.color = 'white';
-        button.style.boxShadow = '0 8px 25px rgba(100, 181, 246, 0.3)';
-
-        // Store answer
-        const value = button.dataset.value;
-        const weight = parseInt(button.dataset.weight) || 0;
-        this.answers[questionIndex] = {
-            value: value,
-            weight: weight,
-            text: button.querySelector('.text')?.textContent || value
-        };
-
-        // Update navigation with animation
-        this.updateNavigationButtons();
-
-        // Auto-advance with enhanced timing
-        if (this.quizData.autoAdvance !== false) {
-            setTimeout(() => {
-                if (this.canProceed()) {
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.target.closest('.quiz-container')) {
+                if (e.key === 'ArrowLeft' && this.currentQuestion > 0) {
+                    this.previousQuestion();
+                } else if (e.key === 'ArrowRight' && this.canProceed()) {
                     this.nextQuestion();
                 }
-            }, 1200);
-        }
-
-        // Enhanced screen reader announcement
-        this.announceToScreenReader(`Selected: ${this.answers[questionIndex].text}. ${this.canProceed() ? 'You can now proceed to the next question.' : ''}`);
-
-        // Track interaction
-        this.trackGlassInteraction('answer_selected', {
-            question: questionIndex + 1,
-            answer: value,
-            weight: weight
+            }
         });
+
+        // Create global method for option selection
+        window.selectOption = (button) => this.selectOption(button);
     }
 
-    selectScaleAnswer(button) {
-        if (!button) return;
-
-        const questionDiv = button.closest('.question');
-        const questionIndex = parseInt(questionDiv.dataset.question) - 1;
-
-        // Animate selection
-        this.animateScaleSelection(button, questionDiv);
-
+    selectOption(button) {
+        const questionIndex = parseInt(button.dataset.question);
+        const value = button.dataset.value;
+        const weight = parseInt(button.dataset.weight) || 0;
+        const questionCard = button.closest('.question-card');
+        
         // Clear previous selections
-        questionDiv.querySelectorAll('.scale-btn').forEach(btn => {
+        questionCard.querySelectorAll('.glass-option-btn').forEach(btn => {
             btn.classList.remove('selected');
-            btn.setAttribute('aria-selected', 'false');
+            btn.querySelector('.option-checkmark').style.opacity = '0';
             if (btn !== button) {
                 btn.style.background = 'rgba(255, 255, 255, 0.08)';
-                btn.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                btn.style.borderColor = 'rgba(255, 255, 255, 0.15)';
                 btn.style.transform = '';
             }
         });
 
-        // Select current answer
+        // Select current option with beautiful animation
         button.classList.add('selected');
-        button.setAttribute('aria-selected', 'true');
-        button.style.background = 'rgba(100, 181, 246, 0.2)';
-        button.style.borderColor = 'rgba(100, 181, 246, 0.5)';
-        button.style.color = 'white';
-        button.style.transform = 'scale(1.1)';
+        const option = this.quizData.questions[questionIndex].options.find(opt => opt.value === value);
+        if (option) {
+            button.style.background = `rgba(${this.hexToRgb(option.color)}, 0.25)`;
+            button.style.borderColor = `rgba(${this.hexToRgb(option.color)}, 0.6)`;
+            button.style.transform = 'translateX(8px) scale(1.02)';
+            button.style.boxShadow = `0 8px 25px rgba(${this.hexToRgb(option.color)}, 0.3)`;
+        }
+        
+        button.querySelector('.option-checkmark').style.opacity = '1';
 
         // Store answer
-        const value = button.dataset.value;
-        const weight = parseInt(button.dataset.weight) || parseInt(value) || 0;
         this.answers[questionIndex] = {
             value: value,
             weight: weight,
-            text: `Scale: ${value}`
+            text: button.querySelector('.option-text').textContent
         };
 
+        // Update navigation
         this.updateNavigationButtons();
-        this.announceToScreenReader(`Selected scale value: ${value}`);
 
-        // Track interaction
-        this.trackGlassInteraction('scale_selected', {
-            question: questionIndex + 1,
-            scale_value: value,
-            weight: weight
-        });
-    }
-
-    /**
-     * Animate answer selection with glass effects
-     */
-    animateAnswerSelection(button, questionDiv) {
-        if (!this.glassEffects.enabled) return;
-
-        // Create selection ripple effect
-        const ripple = document.createElement('div');
-        ripple.style.cssText = `
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, rgba(100, 181, 246, 0.3) 0%, transparent 70%);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            animation: glassRipple 0.6s ease-out;
-        `;
-
-        button.appendChild(ripple);
-
-        // Add ripple animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes glassRipple {
-                0% { width: 0; height: 0; opacity: 1; }
-                100% { width: 200px; height: 200px; opacity: 0; }
-            }
-        `;
-        if (!document.getElementById('glass-ripple-style')) {
-            style.id = 'glass-ripple-style';
-            document.head.appendChild(style);
-        }
-
+        // Auto-advance after selection (with delay for visual feedback)
         setTimeout(() => {
-            if (ripple.parentNode) {
-                ripple.parentNode.removeChild(ripple);
+            if (this.canProceed() && this.currentQuestion < this.quizData.questions.length - 1) {
+                this.nextQuestion();
             }
-        }, 600);
-    }
-
-    /**
-     * Animate scale selection
-     */
-    animateScaleSelection(button, questionDiv) {
-        if (!this.glassEffects.enabled) return;
-
-        // Create scale selection wave effect
-        const wave = document.createElement('div');
-        wave.style.cssText = `
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(100, 181, 246, 0.2), transparent);
-            pointer-events: none;
-            animation: scaleWave 0.5s ease-out;
-        `;
-
-        button.appendChild(wave);
-
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes scaleWave {
-                0% { transform: translateX(-100%) skewX(-45deg); }
-                100% { transform: translateX(200%) skewX(-45deg); }
-            }
-        `;
-        if (!document.getElementById('scale-wave-style')) {
-            style.id = 'scale-wave-style';
-            document.head.appendChild(style);
-        }
-
-        setTimeout(() => {
-            if (wave.parentNode) {
-                wave.parentNode.removeChild(wave);
-            }
-        }, 500);
+        }, 1000);
     }
 
     nextQuestion() {
@@ -777,16 +376,16 @@ class SymptomChecker {
 
         if (this.currentQuestion < this.quizData.questions.length - 1) {
             this.currentQuestion++;
-            this.showQuestion(this.currentQuestion);
+            this.showSingleQuestion(this.currentQuestion);
         } else {
-            this.completeQuizWithGlassTransition();
+            this.completeQuiz();
         }
     }
 
     previousQuestion() {
         if (this.currentQuestion > 0) {
             this.currentQuestion--;
-            this.showQuestion(this.currentQuestion);
+            this.showSingleQuestion(this.currentQuestion);
         }
     }
 
@@ -800,73 +399,13 @@ class SymptomChecker {
         
         if (progressFill && progressText) {
             const progress = ((this.currentQuestion + 1) / this.quizData.questions.length) * 100;
-            
-            // Animate progress with glass effect
             progressFill.style.width = `${progress}%`;
+            progressFill.style.background = `linear-gradient(90deg, 
+                rgba(100, 181, 246, 0.8) 0%, 
+                rgba(33, 150, 243, 0.9) 50%, 
+                rgba(100, 181, 246, 0.8) 100%)`;
             progressText.textContent = `Question ${this.currentQuestion + 1} of ${this.quizData.questions.length}`;
-
-            // Add progress milestone effects
-            if (progress === 25 || progress === 50 || progress === 75 || progress === 100) {
-                this.showProgressMilestone(progress);
-            }
         }
-    }
-
-    /**
-     * Show progress milestone with glass effects
-     */
-    showProgressMilestone(progress) {
-        if (!this.glassEffects.enabled) return;
-
-        const milestone = document.createElement('div');
-        milestone.className = 'progress-milestone';
-        milestone.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(100, 181, 246, 0.2);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(100, 181, 246, 0.4);
-            border-radius: 16px;
-            padding: 2rem;
-            color: white;
-            font-weight: 700;
-            text-align: center;
-            z-index: 10000;
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.8);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        `;
-
-        const milestoneText = {
-            25: '🎯 25% Complete!',
-            50: '⚡ Halfway There!',
-            75: '🚀 Almost Done!',
-            100: '🎉 Complete!'
-        };
-
-        milestone.innerHTML = `
-            <div style="font-size: 2rem; margin-bottom: 0.5rem;">${milestoneText[progress].split(' ')[0]}</div>
-            <div style="font-size: 1.2rem;">${milestoneText[progress].substring(2)}</div>
-        `;
-
-        document.body.appendChild(milestone);
-
-        requestAnimationFrame(() => {
-            milestone.style.opacity = '1';
-            milestone.style.transform = 'translate(-50%, -50%) scale(1)';
-        });
-
-        setTimeout(() => {
-            milestone.style.opacity = '0';
-            milestone.style.transform = 'translate(-50%, -50%) scale(0.8)';
-            setTimeout(() => {
-                if (milestone.parentNode) {
-                    milestone.parentNode.removeChild(milestone);
-                }
-            }, 400);
-        }, 2000);
     }
 
     updateNavigationButtons() {
@@ -883,408 +422,180 @@ class SymptomChecker {
             nextBtn.style.opacity = !this.canProceed() ? '0.5' : '1';
             
             if (this.currentQuestion === this.quizData.questions.length - 1) {
-                nextBtn.innerHTML = `
-                    <span style="margin-right: 8px;">🎯</span>
-                    Get Results
-                `;
+                nextBtn.innerHTML = '<span>🎯</span> Get Results';
             } else {
-                nextBtn.innerHTML = `
-                    Next
-                    <span style="margin-left: 8px;">→</span>
-                `;
+                nextBtn.innerHTML = 'Next <span>→</span>';
             }
         }
     }
 
-    calculateScore() {
-        this.totalScore = 0;
-        Object.values(this.answers).forEach(answer => {
-            this.totalScore += answer.weight;
-        });
-        return this.totalScore;
-    }
-
-    getResultLevel() {
-        const score = this.calculateScore();
-        const scoring = this.quizData.scoring;
-
-        if (score <= scoring.low.max) {
-            return 'low';
-        } else if (score <= scoring.moderate.max) {
-            return 'moderate';
-        } else {
-            return 'high';
-        }
-    }
-
-    /**
-     * Complete quiz with glass transition effects
-     */
-    async completeQuizWithGlassTransition() {
-        this.isQuizCompleted = true;
-        const score = this.calculateScore();
-        const level = this.getResultLevel();
-
-        // Show completion loading state
-        this.showGlassLoadingState();
+    completeQuiz() {
+        const totalScore = Object.values(this.answers).reduce((sum, answer) => sum + answer.weight, 0);
         
-        // Simulate processing time for dramatic effect
-        await new Promise(resolve => setTimeout(resolve, 1500));
-
-        // Hide quiz with glass transition
+        // Hide quiz container
         const quizContainer = document.querySelector('.quiz-container');
-        if (quizContainer && this.glassEffects.enabled) {
-            quizContainer.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
-            quizContainer.style.transform = 'scale(0.95) translateY(-20px)';
-            quizContainer.style.opacity = '0';
-            quizContainer.style.filter = 'blur(10px)';
-        }
-
+        quizContainer.style.transform = 'scale(0.95)';
+        quizContainer.style.opacity = '0';
+        
         setTimeout(() => {
             quizContainer.style.display = 'none';
-            this.showGlassResults(score, level);
-        }, 800);
-
-        // Track completion
-        this.trackGlassInteraction('quiz_completed', {
-            tool: this.toolName,
-            score: score,
-            level: level,
-            answers_count: Object.keys(this.answers).length,
-            completion_time: Date.now()
-        });
+            this.showResults(totalScore);
+        }, 500);
     }
 
-    /**
-     * Show results with enhanced glass effects
-     */
-    showGlassResults(score, level) {
-        const resultsSection = document.getElementById('resultsSection');
-        if (!resultsSection) return;
-
-        // Apply glassmorphism to results
-        resultsSection.style.cssText += `
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-            position: relative;
-            overflow: hidden;
-        `;
-
-        resultsSection.style.display = 'block';
-        this.displayResults(score, level);
-
-        // Animate results in
-        if (this.glassEffects.enabled) {
-            resultsSection.style.opacity = '0';
-            resultsSection.style.transform = 'scale(0.9) translateY(30px)';
-            resultsSection.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
-
-            requestAnimationFrame(() => {
-                resultsSection.style.opacity = '1';
-                resultsSection.style.transform = 'scale(1) translateY(0)';
-            });
-        }
-
-        // Scroll to results with smooth behavior
-        setTimeout(() => {
-            resultsSection.scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }, 400);
-
-        // Announce completion
-        this.announceToScreenReader(`Quiz completed successfully. Your ${this.toolName} risk level is ${level} with a score of ${score}. Please review your detailed results below.`);
-    }
-
-    displayResults(score, level) {
-        const scoring = this.quizData.scoring[level];
-        const recommendations = this.quizData.recommendations[level];
-
-        // Enhanced score display with glass effects
-        const scoreNumber = document.querySelector('.score-number');
-        const scoreLabel = document.querySelector('.score-label');
-        const riskLevel = document.querySelector('.risk-level');
-
-        if (scoreNumber) {
-            scoreNumber.textContent = score;
-            scoreNumber.style.cssText += `
-                background: linear-gradient(135deg, rgba(100, 181, 246, 0.2), rgba(33, 150, 243, 0.2));
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(100, 181, 246, 0.3);
-                border-radius: 50%;
-                width: 120px;
-                height: 120px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 0 auto 1rem;
-                font-size: 2.5rem;
-                font-weight: 800;
-                color: white;
-                text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            `;
-        }
-
-        if (scoreLabel) {
-            scoreLabel.textContent = 'Risk Score';
-            scoreLabel.style.color = 'rgba(255, 255, 255, 0.9)';
-        }
-
-        if (riskLevel) {
-            riskLevel.textContent = scoring.level;
-            riskLevel.className = `risk-level ${level}`;
-            riskLevel.style.cssText += `
-                background: rgba(${this.getLevelColor(level)}, 0.2);
-                backdrop-filter: blur(8px);
-                border: 1px solid rgba(${this.getLevelColor(level)}, 0.4);
-                border-radius: 20px;
-                padding: 0.5rem 1rem;
-                display: inline-block;
-                margin-top: 1rem;
-                color: white;
-                font-weight: 700;
-            `;
-        }
-
-        // Enhanced recommendations with glass cards
-        const recommendationsList = document.querySelector('.result-interpretation ul');
-        if (recommendationsList && recommendations) {
-            recommendationsList.innerHTML = recommendations.map((rec, index) => `
-                <li style="
-                    background: rgba(255, 255, 255, 0.08);
+    showResults(score) {
+        const resultsSection = document.getElementById('resultsSection') || this.createResultsSection();
+        
+        let level = 'low';
+        if (score >= this.quizData.scoring.high.min) level = 'high';
+        else if (score >= this.quizData.scoring.moderate.min) level = 'moderate';
+        
+        const levelData = this.quizData.scoring[level];
+        
+        resultsSection.innerHTML = `
+            <div class="results-card" style="
+                background: rgba(255, 255, 255, 0.12);
+                backdrop-filter: blur(25px);
+                border: 1px solid rgba(255, 255, 255, 0.25);
+                border-radius: 24px;
+                padding: 3rem;
+                text-align: center;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+                opacity: 0;
+                transform: translateY(30px);
+                transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            ">
+                <div class="score-display" style="
+                    width: 120px;
+                    height: 120px;
+                    margin: 0 auto 2rem;
+                    background: linear-gradient(135deg, rgba(${this.hexToRgb(levelData.color)}, 0.2) 0%, rgba(${this.hexToRgb(levelData.color)}, 0.4) 100%);
                     backdrop-filter: blur(15px);
-                    border: 1px solid rgba(255, 255, 255, 0.15);
-                    border-radius: 12px;
-                    padding: 1.5rem;
-                    margin-bottom: 1rem;
-                    border-left: 4px solid rgba(100, 181, 246, 0.6);
-                    animation: fadeInUp 0.6s ease-out ${index * 0.1}s both;
-                    transition: all 0.3s ease;
-                " onmouseenter="this.style.background='rgba(255, 255, 255, 0.12)'; this.style.transform='translateX(8px)';" onmouseleave="this.style.background='rgba(255, 255, 255, 0.08)'; this.style.transform='';">
-                    <span style="color: rgba(255, 255, 255, 0.9); line-height: 1.6;">${rec}</span>
-                </li>
-            `).join('');
-        }
-
-        // Add restart button with glass effect
-        const restartButton = document.querySelector('.restart-quiz');
-        if (restartButton) {
-            this.enhanceGlassButton(restartButton);
-        }
-    }
-
-    /**
-     * Get color values for different risk levels
-     */
-    getLevelColor(level) {
-        const colors = {
-            'low': '76, 175, 80',     // Green
-            'moderate': '255, 152, 0', // Orange  
-            'high': '244, 67, 54'      // Red
-        };
-        return colors[level] || '100, 181, 246';
-    }
-
-    /**
-     * Restart quiz with glass transition
-     */
-    restartQuizWithGlassTransition() {
-        // Reset state
-        this.currentQuestion = 0;
-        this.answers = {};
-        this.totalScore = 0;
-        this.isQuizCompleted = false;
-
-        // Hide results with glass transition
-        const resultsSection = document.getElementById('resultsSection');
-        if (resultsSection && this.glassEffects.enabled) {
-            resultsSection.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-            resultsSection.style.transform = 'scale(0.95) translateY(20px)';
-            resultsSection.style.opacity = '0';
-            resultsSection.style.filter = 'blur(5px)';
-        }
-
-        setTimeout(() => {
-            resultsSection.style.display = 'none';
-            
-            // Show quiz with glass transition
-            const quizContainer = document.querySelector('.quiz-container');
-            quizContainer.style.display = 'block';
-            
-            if (this.glassEffects.enabled) {
-                quizContainer.style.transform = 'scale(0.95) translateY(20px)';
-                quizContainer.style.opacity = '0';
-                quizContainer.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                    border: 2px solid rgba(${this.hexToRgb(levelData.color)}, 0.5);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 2.5rem;
+                    font-weight: 800;
+                    color: white;
+                    box-shadow: 0 8px 32px rgba(${this.hexToRgb(levelData.color)}, 0.3);
+                ">${score}</div>
                 
-                requestAnimationFrame(() => {
-                    quizContainer.style.transform = 'scale(1) translateY(0)';
-                    quizContainer.style.opacity = '1';
-                    quizContainer.style.filter = 'blur(0px)';
-                });
-            }
-
-            // Restart quiz
-            this.showQuestion(0);
-            this.updateProgress();
-            
-            // Scroll to quiz
-            setTimeout(() => {
-                quizContainer.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }, 300);
-
-            this.announceToScreenReader('Quiz restarted. You are now at the first question.');
-        }, 600);
-
-        // Track restart
-        this.trackGlassInteraction('quiz_restarted', {
-            tool: this.toolName,
-            timestamp: Date.now()
+                <h2 style="color: white; margin-bottom: 1rem; font-size: 2rem;">${levelData.level}</h2>
+                <p style="color: rgba(255, 255, 255, 0.9); font-size: 1.1rem; margin-bottom: 2rem;">
+                    Based on your responses, your risk assessment score is ${score} out of ${this.quizData.questions.length * 3}.
+                </p>
+                
+                <div class="result-actions" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button onclick="location.reload()" style="
+                        background: rgba(255, 255, 255, 0.15);
+                        backdrop-filter: blur(10px);
+                        border: 1px solid rgba(255, 255, 255, 0.3);
+                        border-radius: 12px;
+                        color: white;
+                        padding: 1rem 2rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    ">Take Quiz Again</button>
+                    <button onclick="window.location.href='/'" style="
+                        background: rgba(100, 181, 246, 0.3);
+                        backdrop-filter: blur(10px);
+                        border: 1px solid rgba(100, 181, 246, 0.5);
+                        border-radius: 12px;
+                        color: white;
+                        padding: 1rem 2rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                    ">Explore More Tools</button>
+                </div>
+            </div>
+        `;
+        
+        resultsSection.style.display = 'block';
+        
+        // Animate results in
+        requestAnimationFrame(() => {
+            const resultsCard = resultsSection.querySelector('.results-card');
+            resultsCard.style.opacity = '1';
+            resultsCard.style.transform = 'translateY(0)';
         });
-    }
-
-    /**
-     * Enhanced error display with glassmorphism
-     */
-    showError(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'glass-error-message';
-        errorDiv.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(244, 67, 54, 0.2);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(244, 67, 54, 0.4);
-            border-radius: 16px;
-            padding: 2rem;
-            color: white;
-            text-align: center;
-            z-index: 10000;
-            max-width: 400px;
-            box-shadow: 0 8px 32px rgba(244, 67, 54, 0.2);
-        `;
-
-        errorDiv.innerHTML = `
-            <div style="font-size: 2rem; margin-bottom: 1rem;">⚠️</div>
-            <h3 style="margin-bottom: 1rem; color: white;">Error</h3>
-            <p style="margin-bottom: 2rem; color: rgba(255, 255, 255, 0.9);">${message}</p>
-            <button onclick="location.reload()" style="
-                background: rgba(255, 255, 255, 0.2);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                border-radius: 8px;
-                color: white;
-                padding: 0.8rem 1.5rem;
-                cursor: pointer;
-                font-weight: 600;
-                transition: all 0.3s ease;
-            " onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">
-                Refresh Page
-            </button>
-        `;
-
-        document.body.appendChild(errorDiv);
-    }
-
-    /**
-     * Enhanced screen reader announcements
-     */
-    announceToScreenReader(message) {
-        const announcement = document.createElement('div');
-        announcement.setAttribute('aria-live', 'polite');
-        announcement.setAttribute('aria-atomic', 'true');
-        announcement.className = 'sr-only';
-        announcement.style.cssText = `
-            position: absolute !important;
-            width: 1px !important;
-            height: 1px !important;
-            padding: 0 !important;
-            margin: -1px !important;
-            overflow: hidden !important;
-            clip: rect(0, 0, 0, 0) !important;
-            white-space: nowrap !important;
-            border: 0 !important;
-        `;
-        announcement.textContent = message;
-        document.body.appendChild(announcement);
-
+        
+        // Scroll to results
         setTimeout(() => {
-            if (announcement.parentNode) {
-                document.body.removeChild(announcement);
-            }
-        }, 1000);
+            resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 400);
     }
 
-    /**
-     * Track glassmorphism interactions
-     */
-    trackGlassInteraction(eventName, data) {
-        try {
-            const event = {
-                event: eventName,
-                data: {
-                    ...data,
-                    tool_name: this.toolName,
-                    glassmorphism_enabled: this.glassEffects.enabled,
-                    glass_intensity: this.glassEffects.intensity,
-                    timestamp: new Date().toISOString()
+    createResultsSection() {
+        const section = document.createElement('div');
+        section.id = 'resultsSection';
+        section.className = 'quiz-results';
+        document.querySelector('.quiz-section .container').appendChild(section);
+        return section;
+    }
+
+    showLoadingSpinner() {
+        const quizContent = document.querySelector('.quiz-content');
+        if (quizContent) {
+            quizContent.innerHTML = `
+                <div style="text-align: center; padding: 3rem;">
+                    <div class="glass-loading-spinner" style="
+                        width: 60px;
+                        height: 60px;
+                        margin: 0 auto 1rem;
+                        border: 3px solid rgba(255, 255, 255, 0.3);
+                        border-top: 3px solid rgba(100, 181, 246, 0.8);
+                        border-radius: 50%;
+                        animation: spin 1s linear infinite;
+                    "></div>
+                    <p style="color: white;">Loading beautiful quiz...</p>
+                </div>
+            `;
+        }
+        
+        // Add spinner animation
+        if (!document.getElementById('spinner-animation')) {
+            const style = document.createElement('style');
+            style.id = 'spinner-animation';
+            style.textContent = `
+                @keyframes spin {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
                 }
-            };
+            `;
+            document.head.appendChild(style);
+        }
+    }
 
-            // Store locally
-            const events = JSON.parse(localStorage.getItem('vitaldx_glass_quiz_events') || '[]');
-            events.push(event);
-            
-            if (events.length > 50) {
-                events.splice(0, events.length - 50);
-            }
-            
-            localStorage.setItem('vitaldx_glass_quiz_events', JSON.stringify(events));
+    hideLoadingSpinner() {
+        // Loading will be replaced by first question
+    }
 
-            // Send to analytics if available
-            if (window.VitalDex && window.VitalDex.trackEvent) {
-                window.VitalDx.trackEvent(eventName, event.data);
-            }
-        } catch (e) {
-            console.log('Glass interaction tracking disabled');
+    showError(message) {
+        const quizContent = document.querySelector('.quiz-content');
+        if (quizContent) {
+            quizContent.innerHTML = `
+                <div style="
+                    text-align: center; 
+                    padding: 3rem;
+                    background: rgba(244, 67, 54, 0.1);
+                    backdrop-filter: blur(15px);
+                    border: 1px solid rgba(244, 67, 54, 0.3);
+                    border-radius: 16px;
+                ">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
+                    <p style="color: white; font-size: 1.1rem;">${message}</p>
+                </div>
+            `;
         }
     }
 }
 
-// Enhanced initialization with glassmorphism support
+// Initialize the beautiful one-by-one quiz
 document.addEventListener('DOMContentLoaded', function() {
-    // Get tool name from page or URL
-    const toolName = document.querySelector('[data-tool]')?.dataset.tool || 
-                     window.location.pathname.split('/').filter(Boolean).pop() || 
-                     'health-check';
-
-    // Initialize glassmorphism symptom checker
-    const symptomChecker = new SymptomChecker(toolName);
-    
-    // Make globally available for debugging
-    window.GlassSymptomChecker = symptomChecker;
-    
-    console.log('Glassmorphism Symptom Checker initialized for:', toolName);
+    const toolName = document.querySelector('[data-tool]')?.dataset.tool || 'health-check';
+    new SymptomChecker(toolName);
 });
-
-// Service Worker registration for PWA functionality
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js')
-            .then(function(registration) {
-                console.log('SW registered: ', registration);
-            })
-            .catch(function(registrationError) {
-                console.log('SW registration failed: ', registrationError);
-            });
-    });
-}
