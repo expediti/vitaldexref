@@ -1,340 +1,233 @@
 /**
- * VitalDX - Fixed Quiz with Single Navigation
- * Fixes: Next button working + No duplicate navigation
+ * Simple Working Symptom Checker - Fixed Version
  */
 
 class SymptomChecker {
-    constructor(toolName) {
-        this.toolName = toolName;
-        this.quizData = null;
+    constructor() {
         this.currentQuestion = 0;
         this.answers = {};
-        this.totalScore = 0;
-        this.isQuizCompleted = false;
+        this.questions = [
+            {
+                question: "How are you feeling today?",
+                options: [
+                    { text: "Very unwell", weight: 3, color: "#EF4444", icon: "🔴" },
+                    { text: "Somewhat unwell", weight: 2, color: "#F59E0B", icon: "🟡" },
+                    { text: "Slightly unwell", weight: 1, color: "#10B981", icon: "🟢" },
+                    { text: "Feeling fine", weight: 0, color: "#3B82F6", icon: "✅" }
+                ]
+            },
+            {
+                question: "Do you have any fever or body aches?",
+                options: [
+                    { text: "High fever with severe aches", weight: 3, color: "#EF4444", icon: "🌡️" },
+                    { text: "Mild fever with some aches", weight: 2, color: "#F59E0B", icon: "🤒" },
+                    { text: "No fever but slight aches", weight: 1, color: "#10B981", icon: "😐" },
+                    { text: "No fever or aches", weight: 0, color: "#3B82F6", icon: "😊" }
+                ]
+            },
+            {
+                question: "Do you have any respiratory symptoms?",
+                options: [
+                    { text: "Severe cough or breathing difficulty", weight: 3, color: "#EF4444", icon: "😷" },
+                    { text: "Persistent cough", weight: 2, color: "#F59E0B", icon: "😮‍💨" },
+                    { text: "Occasional cough", weight: 1, color: "#10B981", icon: "😤" },
+                    { text: "No respiratory symptoms", weight: 0, color: "#3B82F6", icon: "😌" }
+                ]
+            }
+        ];
         this.init();
     }
 
-    async init() {
-        try {
-            this.showLoadingSpinner();
-            await this.loadQuizData();
-            this.setupQuizContainer();
-            this.showSingleQuestion(0);
-            this.setupEventListeners();
-            this.hideLoadingSpinner();
-        } catch (error) {
-            console.error('Quiz initialization failed:', error);
-            this.showError('Failed to load quiz. Please refresh the page.');
-        }
+    init() {
+        console.log('Quiz starting...');
+        this.setupQuiz();
+        this.showQuestion(0);
     }
 
-    async loadQuizData() {
-        try {
-            const response = await fetch('./quiz-data.json');
-            this.quizData = await response.json();
-        } catch (error) {
-            // Create sample data if no quiz-data.json
-            this.quizData = this.createSampleQuizData();
-        }
-        
-        if (!this.quizData || !this.quizData.questions) {
-            this.quizData = this.createSampleQuizData();
-        }
-    }
-
-    createSampleQuizData() {
-        return {
-            questions: [
-                {
-                    id: 1,
-                    question: "Do you have body aches, fatigue, or feel generally unwell?",
-                    type: "multiple-choice",
-                    options: [
-                        { text: "Severe fatigue and body aches", value: "severe", weight: 3, icon: "🔴", color: "#EF4444" },
-                        { text: "Moderate fatigue and some aches", value: "moderate", weight: 2, icon: "🟡", color: "#F59E0B" },
-                        { text: "Mild fatigue", value: "mild", weight: 1, icon: "🟢", color: "#10B981" },
-                        { text: "Feeling normal", value: "normal", weight: 0, icon: "✅", color: "#3B82F6" }
-                    ]
-                },
-                {
-                    id: 2,
-                    question: "Do you have a sore throat or runny nose?",
-                    type: "multiple-choice",
-                    options: [
-                        { text: "Both sore throat and runny nose", value: "both", weight: 3, icon: "🤧", color: "#EF4444" },
-                        { text: "Sore throat only", value: "sore_throat", weight: 2, icon: "😷", color: "#F59E0B" },
-                        { text: "Runny nose only", value: "runny_nose", weight: 2, icon: "🤧", color: "#F59E0B" },
-                        { text: "Neither", value: "neither", weight: 0, icon: "😊", color: "#10B981" }
-                    ]
-                },
-                {
-                    id: 3,
-                    question: "Have you been in close contact with someone confirmed to have COVID-19?",
-                    type: "multiple-choice",
-                    options: [
-                        { text: "Yes, confirmed close contact", value: "confirmed", weight: 3, icon: "⚠️", color: "#EF4444" },
-                        { text: "Possible contact / unsure", value: "possible", weight: 2, icon: "🤔", color: "#F59E0B" },
-                        { text: "No known contact", value: "no_contact", weight: 0, icon: "✅", color: "#10B981" }
-                    ]
-                },
-                {
-                    id: 4,
-                    question: "When did your symptoms first appear?",
-                    type: "multiple-choice",
-                    options: [
-                        { text: "Today", value: "today", weight: 3, icon: "🕐", color: "#EF4444" },
-                        { text: "1-3 days ago", value: "recent", weight: 2, icon: "📅", color: "#F59E0B" },
-                        { text: "4-7 days ago", value: "week", weight: 2, icon: "📆", color: "#F59E0B" },
-                        { text: "More than a week ago", value: "old", weight: 1, icon: "📋", color: "#3B82F6" },
-                        { text: "I don't have symptoms", value: "none", weight: 0, icon: "😊", color: "#10B981" }
-                    ]
-                }
-            ],
-            scoring: {
-                low: { min: 0, max: 3, level: "Low Risk", color: "#10B981" },
-                moderate: { min: 4, max: 7, level: "Moderate Risk", color: "#F59E0B" },
-                high: { min: 8, max: 12, level: "High Risk", color: "#EF4444" }
-            }
-        };
-    }
-
-    setupQuizContainer() {
+    setupQuiz() {
         const quizContent = document.querySelector('.quiz-content');
-        if (!quizContent) return;
+        if (!quizContent) {
+            console.error('Quiz content container not found!');
+            return;
+        }
 
-        // SINGLE NAVIGATION - Remove duplicate buttons
         quizContent.innerHTML = `
-            <div class="quiz-progress-container" style="margin-bottom: 2rem;">
+            <div class="progress-container" style="margin-bottom: 2rem;">
                 <div class="progress-bar" style="
                     width: 100%;
                     height: 8px;
                     background: #E5E7EB;
                     border-radius: 8px;
-                    overflow: hidden;
                     margin-bottom: 1rem;
                 ">
                     <div class="progress-fill" style="
                         width: 0%;
                         height: 100%;
-                        background: linear-gradient(90deg, #3B82F6 0%, #2563EB 100%);
+                        background: #3B82F6;
                         border-radius: 8px;
                         transition: width 0.3s ease;
                     "></div>
                 </div>
-                <div class="progress-text" style="
-                    text-align: center;
-                    color: #6B7280;
-                    font-weight: 600;
-                ">Question 1 of ${this.quizData.questions.length}</div>
-            </div>
-            <div class="single-question-container">
-                <!-- Question will be dynamically inserted here -->
-            </div>
-        `;
-
-        // Apply white theme styling to container
-        const quizContainer = document.querySelector('.quiz-container');
-        if (quizContainer) {
-            quizContainer.style.cssText = `
-                background: #ffffff;
-                border: 2px solid #E5E7EB;
-                border-radius: 16px;
-                padding: 2rem;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-                margin: 2rem auto;
-                max-width: 800px;
-            `;
-        }
-    }
-
-    async showSingleQuestion(index) {
-        if (!this.quizData || index >= this.quizData.questions.length) return;
-
-        const question = this.quizData.questions[index];
-        const container = document.querySelector('.single-question-container');
-        
-        if (!container) return;
-
-        // Create new question card
-        const questionCard = this.createQuestionCard(question, index);
-        container.innerHTML = '';
-        container.appendChild(questionCard);
-
-        // Update progress
-        this.updateProgress();
-    }
-
-    createQuestionCard(question, index) {
-        const card = document.createElement('div');
-        card.className = 'question-card';
-        
-        // White theme styling
-        card.style.cssText = `
-            background: #F8FAFC;
-            border: 2px solid #E2E8F0;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-        `;
-
-        card.innerHTML = `
-            <div class="question-header" style="margin-bottom: 2rem;">
-                <div class="question-number" style="
-                    display: inline-block;
-                    background: #3B82F6;
-                    color: white;
-                    padding: 0.5rem 1rem;
-                    border-radius: 8px;
-                    font-weight: 700;
-                    margin-bottom: 1rem;
-                ">
-                    Question ${index + 1} of ${this.quizData.questions.length}
+                <div class="progress-text" style="text-align: center; color: #6B7280;">
+                    Question 1 of ${this.questions.length}
                 </div>
-                <h3 class="question-title" style="
-                    font-size: 1.3rem;
-                    color: #1F2937;
-                    line-height: 1.5;
-                    margin: 0;
-                ">${question.question}</h3>
             </div>
-            <div class="question-options">
-                ${question.options.map((option, optIndex) => `
-                    <button class="option-btn" 
-                            data-value="${option.value}" 
+            <div id="questionContainer"></div>
+        `;
+    }
+
+    showQuestion(index) {
+        if (index >= this.questions.length) {
+            this.showResults();
+            return;
+        }
+
+        const question = this.questions[index];
+        const container = document.getElementById('questionContainer');
+        
+        if (!container) {
+            console.error('Question container not found!');
+            return;
+        }
+
+        container.innerHTML = `
+            <div class="question-card" style="
+                background: #F8FAFC;
+                border: 2px solid #E2E8F0;
+                border-radius: 12px;
+                padding: 2rem;
+                margin-bottom: 2rem;
+            ">
+                <h3 style="
+                    color: #1F2937;
+                    margin-bottom: 2rem;
+                    font-size: 1.3rem;
+                    line-height: 1.5;
+                ">
+                    Question ${index + 1}: ${question.question}
+                </h3>
+                
+                <div class="options">
+                    ${question.options.map((option, optIndex) => `
+                        <button 
+                            class="option-btn" 
                             data-weight="${option.weight}"
-                            data-question="${index}"
+                            data-color="${option.color}"
+                            onclick="quiz.selectAnswer(${index}, ${optIndex}, this)"
                             style="
-                                background: #ffffff;
-                                border: 2px solid #E5E7EB;
-                                border-radius: 12px;
-                                padding: 1rem 1.5rem;
-                                margin-bottom: 1rem;
                                 width: 100%;
                                 text-align: left;
-                                color: #374151;
-                                font-size: 1rem;
+                                padding: 1rem 1.5rem;
+                                margin-bottom: 1rem;
+                                background: white;
+                                border: 2px solid #E5E7EB;
+                                border-radius: 12px;
                                 cursor: pointer;
                                 transition: all 0.2s ease;
                                 display: flex;
                                 align-items: center;
                                 gap: 1rem;
-                                min-height: 60px;
+                                font-size: 1rem;
                             "
-                            onclick="window.symptomChecker.selectOption(this)">
-                        <span class="option-icon" style="font-size: 1.5rem;">${option.icon}</span>
-                        <span class="option-text" style="flex: 1;">${option.text}</span>
-                        <span class="option-checkmark" style="opacity: 0; color: #10B981; font-weight: bold;">✓</span>
-                    </button>
-                `).join('')}
-            </div>
-            
-            <!-- SINGLE NAVIGATION BUTTONS -->
-            <div class="quiz-navigation" style="
-                display: flex;
-                justify-content: space-between;
-                gap: 1rem;
-                margin-top: 2rem;
-                padding-top: 2rem;
-                border-top: 1px solid #E5E7EB;
-            ">
-                <button id="prevBtn" class="nav-btn" ${this.currentQuestion === 0 ? 'disabled' : ''} 
-                        onclick="window.symptomChecker.previousQuestion()"
+                            onmouseover="this.style.borderColor='${option.color}'; this.style.background='#F8FAFC';"
+                            onmouseout="if(!this.classList.contains('selected')) { this.style.borderColor='#E5E7EB'; this.style.background='white'; }"
+                        >
+                            <span style="font-size: 1.5rem;">${option.icon}</span>
+                            <span>${option.text}</span>
+                        </button>
+                    `).join('')}
+                </div>
+
+                <div class="navigation" style="
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: 2rem;
+                    padding-top: 2rem;
+                    border-top: 1px solid #E5E7EB;
+                ">
+                    <button 
+                        onclick="quiz.previousQuestion()" 
+                        ${index === 0 ? 'disabled' : ''}
                         style="
+                            padding: 0.75rem 1.5rem;
                             background: #F3F4F6;
                             border: 2px solid #D1D5DB;
                             border-radius: 8px;
-                            color: #6B7280;
-                            padding: 0.75rem 1.5rem;
-                            font-weight: 600;
-                            cursor: ${this.currentQuestion === 0 ? 'not-allowed' : 'pointer'};
-                            opacity: ${this.currentQuestion === 0 ? '0.5' : '1'};
-                            transition: all 0.2s ease;
-                            min-width: 120px;
+                            cursor: ${index === 0 ? 'not-allowed' : 'pointer'};
+                            opacity: ${index === 0 ? '0.5' : '1'};
                         ">
-                    ← Previous
-                </button>
-                <button id="nextBtn" class="nav-btn" disabled
-                        onclick="window.symptomChecker.nextQuestion()"
+                        ← Previous
+                    </button>
+                    
+                    <button 
+                        id="nextBtn"
+                        onclick="quiz.nextQuestion()" 
+                        disabled
                         style="
+                            padding: 0.75rem 1.5rem;
                             background: #3B82F6;
                             border: 2px solid #3B82F6;
                             border-radius: 8px;
                             color: white;
-                            padding: 0.75rem 1.5rem;
-                            font-weight: 600;
                             cursor: not-allowed;
                             opacity: 0.5;
-                            transition: all 0.2s ease;
-                            min-width: 120px;
                         ">
-                    Next →
-                </button>
+                        ${index === this.questions.length - 1 ? 'Get Results' : 'Next →'}
+                    </button>
+                </div>
             </div>
         `;
 
-        return card;
+        this.updateProgress();
     }
 
-    selectOption(button) {
-        const questionIndex = parseInt(button.dataset.question);
-        const value = button.dataset.value;
-        const weight = parseInt(button.dataset.weight) || 0;
-        const questionCard = button.closest('.question-card');
-        
+    selectAnswer(questionIndex, optionIndex, button) {
         // Clear previous selections
-        questionCard.querySelectorAll('.option-btn').forEach(btn => {
-            btn.style.background = '#ffffff';
+        const allButtons = button.parentElement.querySelectorAll('.option-btn');
+        allButtons.forEach(btn => {
+            btn.classList.remove('selected');
+            btn.style.background = 'white';
             btn.style.borderColor = '#E5E7EB';
-            btn.style.transform = '';
-            btn.querySelector('.option-checkmark').style.opacity = '0';
         });
 
         // Select current option
-        const option = this.quizData.questions[questionIndex].options.find(opt => opt.value === value);
-        if (option) {
-            button.style.background = '#EFF6FF';
-            button.style.borderColor = option.color;
-            button.style.transform = 'scale(1.02)';
-            button.querySelector('.option-checkmark').style.opacity = '1';
-        }
+        button.classList.add('selected');
+        const color = button.dataset.color;
+        button.style.background = '#EFF6FF';
+        button.style.borderColor = color;
 
         // Store answer
         this.answers[questionIndex] = {
-            value: value,
-            weight: weight,
-            text: button.querySelector('.option-text').textContent
+            weight: parseInt(button.dataset.weight),
+            text: button.querySelector('span:last-child').textContent
         };
 
         // Enable next button
-        const nextBtn = questionCard.querySelector('#nextBtn');
+        const nextBtn = document.getElementById('nextBtn');
         if (nextBtn) {
             nextBtn.disabled = false;
             nextBtn.style.cursor = 'pointer';
             nextBtn.style.opacity = '1';
-            nextBtn.style.background = '#3B82F6';
         }
+
+        console.log('Answer selected:', this.answers[questionIndex]);
     }
 
     nextQuestion() {
-        if (!this.canProceed()) return;
-
-        if (this.currentQuestion < this.quizData.questions.length - 1) {
-            this.currentQuestion++;
-            this.showSingleQuestion(this.currentQuestion);
-        } else {
-            this.completeQuiz();
+        if (!this.answers[this.currentQuestion]) {
+            alert('Please select an answer before continuing.');
+            return;
         }
+
+        this.currentQuestion++;
+        this.showQuestion(this.currentQuestion);
     }
 
     previousQuestion() {
         if (this.currentQuestion > 0) {
             this.currentQuestion--;
-            this.showSingleQuestion(this.currentQuestion);
+            this.showQuestion(this.currentQuestion);
         }
-    }
-
-    canProceed() {
-        return this.answers.hasOwnProperty(this.currentQuestion);
     }
 
     updateProgress() {
@@ -342,157 +235,84 @@ class SymptomChecker {
         const progressText = document.querySelector('.progress-text');
         
         if (progressFill && progressText) {
-            const progress = ((this.currentQuestion + 1) / this.quizData.questions.length) * 100;
-            progressFill.style.width = `${progress}%`;
-            progressText.textContent = `Question ${this.currentQuestion + 1} of ${this.quizData.questions.length}`;
+            const progress = ((this.currentQuestion + 1) / this.questions.length) * 100;
+            progressFill.style.width = progress + '%';
+            progressText.textContent = `Question ${this.currentQuestion + 1} of ${this.questions.length}`;
         }
     }
 
-    completeQuiz() {
+    showResults() {
         const totalScore = Object.values(this.answers).reduce((sum, answer) => sum + answer.weight, 0);
+        const maxScore = this.questions.length * 3;
         
-        // Hide quiz container
-        const quizContainer = document.querySelector('.quiz-container');
-        quizContainer.style.opacity = '0';
-        
-        setTimeout(() => {
-            quizContainer.style.display = 'none';
-            this.showResults(totalScore);
-        }, 300);
-    }
+        let level, color, message;
+        if (totalScore <= maxScore * 0.3) {
+            level = "Low Risk";
+            color = "#10B981";
+            message = "Your symptoms appear minimal. Continue monitoring your health.";
+        } else if (totalScore <= maxScore * 0.7) {
+            level = "Moderate Risk";
+            color = "#F59E0B";
+            message = "Monitor your symptoms and consider medical advice if they worsen.";
+        } else {
+            level = "High Risk";
+            color = "#EF4444";
+            message = "Consider consulting with a healthcare professional promptly.";
+        }
 
-    showResults(score) {
-        let level = 'low';
-        if (score >= this.quizData.scoring.high.min) level = 'high';
-        else if (score >= this.quizData.scoring.moderate.min) level = 'moderate';
-        
-        const levelData = this.quizData.scoring[level];
-        
-        // Create results section
-        const resultsHTML = `
-            <div class="results-container" style="
-                max-width: 800px;
-                margin: 2rem auto;
-                background: #ffffff;
+        document.querySelector('.quiz-content').innerHTML = `
+            <div style="
+                text-align: center;
+                background: white;
                 border: 2px solid #E5E7EB;
                 border-radius: 16px;
                 padding: 3rem;
-                text-align: center;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+                max-width: 600px;
+                margin: 0 auto;
             ">
-                <div class="score-circle" style="
+                <div style="
                     width: 120px;
                     height: 120px;
-                    margin: 0 auto 2rem;
-                    background: ${levelData.color};
+                    background: ${color};
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     font-size: 2.5rem;
-                    font-weight: 800;
+                    font-weight: bold;
                     color: white;
-                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-                ">${score}</div>
+                    margin: 0 auto 2rem;
+                ">${totalScore}</div>
                 
-                <h2 style="color: ${levelData.color}; margin-bottom: 1rem; font-size: 2rem;">${levelData.level}</h2>
-                <p style="color: #6B7280; font-size: 1.1rem; margin-bottom: 2rem; line-height: 1.6;">
-                    Based on your responses, your risk assessment score is ${score} out of ${this.quizData.questions.length * 3}.
-                    ${level === 'high' ? 'Consider consulting with a healthcare professional.' : 
-                      level === 'moderate' ? 'Monitor your symptoms and consider medical advice if they worsen.' :
-                      'Your symptoms appear minimal. Continue healthy practices.'}
-                </p>
+                <h2 style="color: ${color}; margin-bottom: 1rem;">${level}</h2>
+                <p style="color: #6B7280; margin-bottom: 2rem; line-height: 1.6;">${message}</p>
                 
-                <div class="result-actions" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <div style="display: flex; gap: 1rem; justify-content: center;">
                     <button onclick="location.reload()" style="
+                        padding: 1rem 2rem;
                         background: #F3F4F6;
                         border: 2px solid #D1D5DB;
                         border-radius: 8px;
-                        color: #374151;
-                        padding: 1rem 2rem;
-                        font-weight: 600;
                         cursor: pointer;
-                        transition: all 0.2s ease;
-                    ">Take Quiz Again</button>
+                    ">Take Again</button>
                     <button onclick="window.location.href='/'" style="
+                        padding: 1rem 2rem;
                         background: #3B82F6;
                         border: 2px solid #3B82F6;
                         border-radius: 8px;
                         color: white;
-                        padding: 1rem 2rem;
-                        font-weight: 600;
                         cursor: pointer;
-                        transition: all 0.2s ease;
-                    ">Explore More Tools</button>
+                    ">More Tools</button>
                 </div>
             </div>
         `;
-        
-        // Insert results
-        const container = document.querySelector('.quiz-section .container');
-        if (container) {
-            container.innerHTML = resultsHTML;
-        }
-    }
-
-    showLoadingSpinner() {
-        const quizContent = document.querySelector('.quiz-content');
-        if (quizContent) {
-            quizContent.innerHTML = `
-                <div style="text-align: center; padding: 3rem;">
-                    <div class="spinner" style="
-                        width: 40px;
-                        height: 40px;
-                        margin: 0 auto 1rem;
-                        border: 3px solid #E5E7EB;
-                        border-top: 3px solid #3B82F6;
-                        border-radius: 50%;
-                        animation: spin 1s linear infinite;
-                    "></div>
-                    <p style="color: #6B7280;">Loading quiz...</p>
-                </div>
-            `;
-        }
-        
-        // Add spinner animation
-        if (!document.getElementById('spinner-style')) {
-            const style = document.createElement('style');
-            style.id = 'spinner-style';
-            style.textContent = `
-                @keyframes spin {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-    }
-
-    hideLoadingSpinner() {
-        // Loading will be replaced by first question
-    }
-
-    showError(message) {
-        const quizContent = document.querySelector('.quiz-content');
-        if (quizContent) {
-            quizContent.innerHTML = `
-                <div style="
-                    text-align: center; 
-                    padding: 3rem;
-                    background: #FEF2F2;
-                    border: 2px solid #FECACA;
-                    border-radius: 12px;
-                ">
-                    <div style="font-size: 3rem; margin-bottom: 1rem;">⚠️</div>
-                    <p style="color: #B91C1C; font-size: 1.1rem;">${message}</p>
-                </div>
-            `;
-        }
     }
 }
 
-// Initialize the quiz - SINGLE INSTANCE
+// Initialize quiz when page loads
+let quiz;
 document.addEventListener('DOMContentLoaded', function() {
-    const toolName = document.querySelector('[data-tool]')?.dataset.tool || 'health-check';
-    window.symptomChecker = new SymptomChecker(toolName);
+    console.log('Page loaded, starting quiz...');
+    quiz = new SymptomChecker();
 });
+
