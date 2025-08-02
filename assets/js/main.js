@@ -315,3 +315,26 @@
     };
 
 })();
+// Mobile Menu Toggle
+function toggleMobileMenu() {
+    const nav = document.querySelector('.main-nav');
+    const mobileBtn = document.querySelector('.mobile-menu-btn');
+    
+    nav.classList.toggle('mobile-open');
+    mobileBtn.classList.toggle('active');
+}
+
+// Close mobile menu when clicking nav links
+document.addEventListener('DOMContentLoaded', function() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            const nav = document.querySelector('.main-nav');
+            const mobileBtn = document.querySelector('.mobile-menu-btn');
+            
+            nav.classList.remove('mobile-open');
+            mobileBtn.classList.remove('active');
+        });
+    });
+});
