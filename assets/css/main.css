@@ -1,5 +1,6 @@
 /* ==========================================
-VITALDEX - WHITE THEME WITH BRIGHT COLORS
+VITALDX - COMPLETE FIXED VERSION
+White Theme with Header Fix & 3-Card Layout
 ========================================== */
 
 /* CSS Reset and Base Styles */
@@ -24,11 +25,16 @@ body {
     overflow-x: hidden;
 }
 
-/* Container - Full width on mobile */
+/* CRITICAL FIX: Prevent Header Overlap */
+body {
+    padding-top: 80px; /* Matches header height */
+}
+
+/* Container */
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 10px;
+    padding: 0 15px;
 }
 
 /* Typography */
@@ -71,7 +77,7 @@ a:hover, a:focus {
     transform: translateY(-1px);
 }
 
-/* Bright Button Styles */
+/* Button Styles */
 .btn-primary, .btn-secondary {
     display: inline-block;
     padding: 14px 28px;
@@ -117,33 +123,31 @@ a:hover, a:focus {
     transform: translateY(-2px);
 }
 
-/* HEADER OVERLAP FIX */
-.tool-page-header,
-.quiz-section,
-main {
-    margin-top: 80px;
-    padding-top: 1rem;
-}
-
-/* White Header with Bright Colors */
+/* FIXED HEADER - NO MORE OVERLAPPING */
 .main-header {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
     border-bottom: 2px solid #E5E7EB;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+    position: fixed; /* Fixed position */
+    top: 0; /* Stick to top */
+    left: 0;
+    right: 0;
+    z-index: 1000; /* Above all content */
+    height: 80px; /* Fixed height */
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    height: 70px;
 }
 
 .navbar {
-    padding: 1rem 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .navbar .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 100%;
 }
 
 .logo a {
@@ -178,6 +182,7 @@ main {
     list-style: none;
     gap: 1rem;
     margin: 0;
+    align-items: center;
 }
 
 .nav-menu a {
@@ -225,6 +230,34 @@ main {
     background-color: #374151;
     transition: 0.2s;
     border-radius: 2px;
+}
+
+/* TOOL PAGE SPECIFIC FIXES */
+.tool-page-header {
+    margin-top: 2rem; /* Additional spacing for tool pages */
+    text-align: center;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+    border-radius: 16px;
+}
+
+.tool-page-header h1 {
+    font-size: 2.5rem;
+    color: #1E40AF;
+    margin-bottom: 1rem;
+}
+
+.quiz-section {
+    margin-top: 2rem;
+}
+
+.quiz-container {
+    background: #ffffff;
+    border: 2px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
 }
 
 /* Hero Section */
@@ -276,35 +309,35 @@ main {
     color: #6B7280;
 }
 
-/* TOOLS GRID - 3 CARDS PER ROW */
+/* FIXED: 3 CARDS PER ROW LAYOUT */
 .tools-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr); /* Exactly 3 cards per row */
     gap: 2rem;
     margin-top: 3rem;
     padding: 0;
 }
 
-/* Tool Cards with Equal Heights */
+/* Enhanced Tool Cards */
 .tool-card {
     background: #ffffff;
     border-radius: 16px;
     padding: 2rem;
     border: 2px solid #E5E7EB;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     height: 100%;
-    min-height: 350px;
+    min-height: 380px; /* Consistent height */
     position: relative;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 .tool-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px);
     background: #F8FAFC;
     border-color: #3B82F6;
-    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
+    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15);
 }
 
 .tool-icon {
@@ -318,11 +351,11 @@ main {
     background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
     font-size: 2rem;
     color: white;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .tool-card:hover .tool-icon {
-    transform: scale(1.05);
+    transform: scale(1.1) rotate(5deg);
     background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
 }
 
@@ -363,7 +396,7 @@ main {
 }
 
 .tool-action {
-    margin-top: auto;
+    margin-top: auto; /* Push to bottom */
 }
 
 .start-quiz-btn {
@@ -380,7 +413,7 @@ main {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     cursor: pointer;
 }
 
@@ -390,6 +423,79 @@ main {
     box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
     text-decoration: none;
     color: white;
+}
+
+/* BLOG SECTION ENHANCEMENTS */
+.blog-preview-section {
+    padding: 4rem 0;
+    background: #F9FAFB;
+}
+
+.blog-preview-section h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #2563EB;
+    margin-bottom: 3rem;
+}
+
+.blog-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.blog-card {
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid #E5E7EB;
+}
+
+.blog-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15);
+    border-color: #3B82F6;
+}
+
+.blog-card-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.blog-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.blog-card:hover .blog-card-image img {
+    transform: scale(1.05);
+}
+
+.blog-card-content {
+    padding: 1.5rem;
+}
+
+.blog-card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: #1F2937;
+}
+
+.blog-card p {
+    color: #6B7280;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.read-time {
+    font-size: 0.9rem;
+    color: #9CA3AF;
 }
 
 /* Footer */
@@ -441,88 +547,93 @@ main {
     color: #9CA3AF;
 }
 
-/* RESPONSIVE DESIGN */
+/* RESPONSIVE DESIGN - MOBILE OPTIMIZED */
 @media (max-width: 1200px) {
     .tools-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr); /* Keep 3 on large tablets */
         gap: 1.5rem;
     }
     
-    .tool-card {
-        padding: 1.8rem;
-        min-height: 320px;
+    .blog-preview-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 900px) {
     .tools-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* 2 on medium screens */
         gap: 1.5rem;
     }
     
+    .blog-preview-grid {
+        grid-template-columns: 1fr;
+    }
+    
     .tool-card {
-        min-height: 280px;
+        min-height: 320px;
     }
 }
 
 @media (max-width: 768px) {
+    /* Mobile header adjustments */
+    body {
+        padding-top: 70px; /* Smaller padding for mobile */
+    }
+    
+    .main-header {
+        height: 70px;
+    }
+    
     .container {
-        padding: 0 5px;
-        max-width: 100%;
+        padding: 0 10px;
     }
     
     .tools-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Single column on mobile */
         gap: 1rem;
-        margin: 1rem 0;
     }
     
     .tool-card {
         padding: 1.5rem;
-        margin: 0;
-        min-height: 250px;
+        min-height: 280px;
     }
     
     .hero-section {
-        padding: 2rem 0;
+        padding: 3rem 0;
     }
     
     .hero-content h2 {
-        font-size: 2rem;
+        font-size: 2.2rem;
     }
     
     .tools-section {
-        padding: 2rem 0;
+        padding: 3rem 0;
     }
     
     .section-header h2 {
-        font-size: 1.8rem;
+        font-size: 2rem;
     }
     
-    /* Mobile Header Fix */
-    .tool-page-header,
-    .quiz-section,
-    main {
-        margin-top: 60px;
+    .tool-page-header h1 {
+        font-size: 2rem;
     }
     
-    .main-header {
-        height: 60px;
-    }
-    
+    /* Mobile Navigation */
     .nav-menu {
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
-        background: white;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
         border: 2px solid #E5E7EB;
         border-radius: 0 0 16px 16px;
         flex-direction: column;
         transform: translateY(-10px);
         opacity: 0;
         visibility: hidden;
-        transition: all 0.2s ease;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
     
     .nav-menu.active {
@@ -531,12 +642,37 @@ main {
         visibility: visible;
     }
     
+    .nav-menu a {
+        margin: 0.5rem 1rem;
+        padding: 1rem;
+        text-align: center;
+    }
+    
     .mobile-menu-toggle {
         display: flex;
     }
 }
 
-/* Remove complex effects for better performance */
+@media (max-width: 480px) {
+    .container {
+        padding: 0 5px;
+    }
+    
+    .tool-card {
+        padding: 1rem;
+        min-height: 260px;
+    }
+    
+    .hero-content h2 {
+        font-size: 1.8rem;
+    }
+    
+    .section-header h2 {
+        font-size: 1.6rem;
+    }
+}
+
+/* Performance Optimizations */
 * {
     will-change: auto;
 }
@@ -545,6 +681,32 @@ main {
 @media (max-width: 768px) and (max-resolution: 1dppx) {
     *, *::before, *::after {
         animation: none !important;
-        transition: none !important;
+        transition-duration: 0.1s !important;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles */
+*:focus {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .tool-card, .blog-card {
+        border: 3px solid #000;
+    }
+    
+    .btn-primary {
+        border: 3px solid #000;
     }
 }
