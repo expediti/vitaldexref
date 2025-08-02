@@ -710,3 +710,33 @@ a:hover, a:focus {
         border: 3px solid #000;
     }
 }
+/* FORCE OVERRIDE - Add at the very end of main.css */
+.tools-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 2rem !important;
+}
+
+body {
+    padding-top: 80px !important;
+}
+
+.main-header {
+    position: fixed !important;
+    top: 0 !important;
+    z-index: 1000 !important;
+    height: 80px !important;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 70px !important;
+    }
+    
+    .main-header {
+        height: 70px !important;
+    }
+    
+    .tools-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
