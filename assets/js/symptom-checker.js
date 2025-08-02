@@ -1,3 +1,31 @@
+// FORCE SINGLE QUESTION DISPLAY
+document.addEventListener('DOMContentLoaded', function() {
+    // Hide all questions except the first one
+    const questions = document.querySelectorAll('.question');
+    questions.forEach((q, index) => {
+        if (index > 0) {
+            q.style.display = 'none';
+        }
+    });
+    
+    // Initialize simple quiz
+    window.currentQuestionIndex = 0;
+    window.showNextQuestion = function() {
+        const current = document.querySelector('.question.active');
+        if (current) {
+            current.style.display = 'none';
+            current.classList.remove('active');
+        }
+        
+        window.currentQuestionIndex++;
+        const next = document.querySelectorAll('.question')[window.currentQuestionIndex];
+        if (next) {
+            next.style.display = 'block';
+            next.classList.add('active');
+        }
+    };
+});
+
 /**
  * VitalDx - Complete Quiz System with Full Questions
  * Each tool gets 7-8 detailed questions
