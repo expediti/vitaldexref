@@ -18,19 +18,17 @@ body {
     font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
     line-height: 1.6;
     color: #333;
-    background: #ffffff; /* Simple white background */
+    background: #ffffff;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
 }
 
-/* NO BACKGROUND ANIMATION - REMOVED */
-
 /* Container - Full width on mobile */
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 10px; /* Reduced padding for mobile */
+    padding: 0 10px;
 }
 
 /* Typography */
@@ -42,33 +40,33 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-size: 2.5rem;
-    color: #2563EB; /* Bright blue */
+    color: #2563EB;
     text-shadow: none;
 }
 
 h2 {
     font-size: 2rem;
-    color: #2563EB; /* Bright blue */
+    color: #2563EB;
 }
 
 h3 {
     font-size: 1.5rem;
-    color: #1F2937; /* Dark gray */
+    color: #1F2937;
 }
 
 p {
     margin-bottom: 1rem;
-    color: #4B5563; /* Medium gray */
+    color: #4B5563;
 }
 
 a {
-    color: #2563EB; /* Bright blue */
+    color: #2563EB;
     text-decoration: none;
-    transition: all 0.2s ease; /* Faster transition */
+    transition: all 0.2s ease;
 }
 
 a:hover, a:focus {
-    color: #1D4ED8; /* Darker blue */
+    color: #1D4ED8;
     text-decoration: none;
     transform: translateY(-1px);
 }
@@ -91,7 +89,7 @@ a:hover, a:focus {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); /* Bright blue gradient */
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
     color: white;
     box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
     border: 2px solid #3B82F6;
@@ -106,8 +104,8 @@ a:hover, a:focus {
 }
 
 .btn-secondary {
-    background: #F3F4F6; /* Light gray */
-    color: #374151; /* Dark gray */
+    background: #F3F4F6;
+    color: #374151;
     border: 2px solid #D1D5DB;
 }
 
@@ -119,6 +117,14 @@ a:hover, a:focus {
     transform: translateY(-2px);
 }
 
+/* HEADER OVERLAP FIX */
+.tool-page-header,
+.quiz-section,
+main {
+    margin-top: 80px;
+    padding-top: 1rem;
+}
+
 /* White Header with Bright Colors */
 .main-header {
     background: #ffffff;
@@ -127,6 +133,7 @@ a:hover, a:focus {
     top: 0;
     z-index: 1000;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    height: 70px;
 }
 
 .navbar {
@@ -155,7 +162,7 @@ a:hover, a:focus {
 .logo h1 {
     font-size: 1.8rem;
     margin-bottom: 0;
-    color: #2563EB; /* Bright blue */
+    color: #2563EB;
     font-weight: 800;
 }
 
@@ -184,7 +191,7 @@ a:hover, a:focus {
 }
 
 .nav-menu a:hover, .nav-menu a:focus {
-    background: #EFF6FF; /* Light blue */
+    background: #EFF6FF;
     color: #2563EB;
     text-decoration: none;
     transform: translateY(-2px);
@@ -222,16 +229,16 @@ a:hover, a:focus {
 
 /* Hero Section */
 .hero-section {
-    padding: 4rem 0; /* Reduced padding */
+    padding: 4rem 0;
     text-align: center;
     position: relative;
-    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); /* Light blue gradient */
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
 }
 
 .hero-content h2 {
-    font-size: 3rem; /* Smaller for mobile */
+    font-size: 3rem;
     margin-bottom: 1.5rem;
-    color: #1E40AF; /* Bright blue */
+    color: #1E40AF;
     font-weight: 800;
 }
 
@@ -246,7 +253,7 @@ a:hover, a:focus {
 
 /* Tools Section */
 .tools-section {
-    padding: 4rem 0; /* Reduced padding */
+    padding: 4rem 0;
     position: relative;
     background: #ffffff;
 }
@@ -269,14 +276,16 @@ a:hover, a:focus {
     color: #6B7280;
 }
 
+/* TOOLS GRID - 3 CARDS PER ROW */
 .tools-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Exactly 2 per row */
-    gap: 1.5rem; /* Reduced gap */
-    margin-top: 2rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+    padding: 0;
 }
 
-/* Bright Tool Cards */
+/* Tool Cards with Equal Heights */
 .tool-card {
     background: #ffffff;
     border-radius: 16px;
@@ -286,6 +295,7 @@ a:hover, a:focus {
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-height: 350px;
     position: relative;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
@@ -326,12 +336,14 @@ a:hover, a:focus {
     margin-bottom: 1rem;
     color: #1F2937;
     font-weight: 700;
+    line-height: 1.3;
 }
 
 .tool-content p {
     color: #6B7280;
     margin-bottom: 1rem;
     line-height: 1.6;
+    font-size: 1rem;
 }
 
 .tool-meta {
@@ -348,6 +360,36 @@ a:hover, a:focus {
     padding: 6px 12px;
     border-radius: 20px;
     border: 1px solid #D1D5DB;
+}
+
+.tool-action {
+    margin-top: auto;
+}
+
+.start-quiz-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: white;
+    border: 2px solid #3B82F6;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.start-quiz-btn:hover {
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
+    text-decoration: none;
+    color: white;
 }
 
 /* Footer */
@@ -399,15 +441,38 @@ a:hover, a:focus {
     color: #9CA3AF;
 }
 
-/* Mobile Optimizations - FULL SCREEN */
+/* RESPONSIVE DESIGN */
+@media (max-width: 1200px) {
+    .tools-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .tool-card {
+        padding: 1.8rem;
+        min-height: 320px;
+    }
+}
+
+@media (max-width: 900px) {
+    .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .tool-card {
+        min-height: 280px;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
-        padding: 0 5px; /* Minimal padding */
+        padding: 0 5px;
         max-width: 100%;
     }
     
     .tools-grid {
-        grid-template-columns: 1fr; /* Single column on mobile */
+        grid-template-columns: 1fr;
         gap: 1rem;
         margin: 1rem 0;
     }
@@ -415,6 +480,7 @@ a:hover, a:focus {
     .tool-card {
         padding: 1.5rem;
         margin: 0;
+        min-height: 250px;
     }
     
     .hero-section {
@@ -431,6 +497,17 @@ a:hover, a:focus {
     
     .section-header h2 {
         font-size: 1.8rem;
+    }
+    
+    /* Mobile Header Fix */
+    .tool-page-header,
+    .quiz-section,
+    main {
+        margin-top: 60px;
+    }
+    
+    .main-header {
+        height: 60px;
     }
     
     .nav-menu {
@@ -459,7 +536,7 @@ a:hover, a:focus {
     }
 }
 
-/* Remove all complex effects for better performance */
+/* Remove complex effects for better performance */
 * {
     will-change: auto;
 }
