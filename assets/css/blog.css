@@ -1,12 +1,13 @@
 /* ==========================================
-VITALDEX - GLASSMORPHISM BLOG STYLESHEET
+VITALDEX - BLOG STYLESHEET - MODERN & CLEAN
+White Theme with Bright Colors
 ========================================== */
 
-/* Enhanced Blog Hero with Glassmorphism */
+/* Blog Hero Section */
 .blog-hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
     color: white;
-    padding: 6rem 0;
+    padding: 6rem 2rem 4rem;
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -15,172 +16,118 @@ VITALDEX - GLASSMORPHISM BLOG STYLESHEET
 .blog-hero::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
-    animation: blogHeroFloat 15s ease-in-out infinite alternate;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+    animation: heroFloat 20s ease-in-out infinite alternate;
 }
 
-@keyframes blogHeroFloat {
-    0% { transform: translateY(0px) rotate(0deg); }
-    100% { transform: translateY(-15px) rotate(1deg); }
+@keyframes heroFloat {
+    0% { transform: translate(0, 0) rotate(0deg); }
+    100% { transform: translate(20px, -20px) rotate(360deg); }
 }
 
 .blog-hero h1 {
-    font-size: 3.2rem;
-    margin-bottom: 1.5rem;
+    font-size: 3.5rem;
     font-weight: 800;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin-bottom: 1rem;
+    text-shadow: 0 4px 8px rgba(0,0,0,0.3);
     position: relative;
     z-index: 2;
-    animation: fadeInUp 1s ease-out;
 }
 
 .blog-hero p {
     font-size: 1.3rem;
-    margin-bottom: 3rem;
     max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-    opacity: 0.95;
-    position: relative;
-    z-index: 2;
-    animation: fadeInUp 1s ease-out 0.2s both;
-}
-
-/* Glassmorphism Search Box */
-.search-box {
-    display: flex;
-    max-width: 600px;
     margin: 0 auto;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 25px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
     position: relative;
     z-index: 2;
-    animation: fadeInUp 1s ease-out 0.4s both;
-    transition: all 0.3s ease;
 }
 
-.search-box:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-2px);
+/* Search Box */
+.search-box {
+    max-width: 600px;
+    margin: 2rem auto 4rem;
+    display: flex;
+    background: white;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.2);
+    border: 1px solid #E5E7EB;
 }
 
 .search-box input {
     flex: 1;
-    padding: 1.2rem 2rem;
     border: none;
-    background: transparent;
+    padding: 1rem 1.5rem;
     font-size: 1rem;
     outline: none;
-    color: white;
-    font-weight: 500;
+    color: #1F2937;
 }
 
 .search-box input::placeholder {
-    color: rgba(255, 255, 255, 0.8);
+    color: #9CA3AF;
 }
 
 .search-box button {
-    background: rgba(33, 150, 243, 0.8);
-    backdrop-filter: blur(10px);
-    color: white;
+    background: #3B82F6;
     border: none;
-    padding: 1.2rem 2rem;
+    color: white;
+    padding: 0 2rem;
     cursor: pointer;
-    font-size: 1.1rem;
     font-weight: 600;
     transition: all 0.3s ease;
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .search-box button:hover {
-    background: rgba(33, 150, 243, 1);
-    transform: scale(1.05);
+    background: #2563EB;
 }
 
-/* Featured Articles with Glass Cards */
+/* Featured Articles Section */
 .featured-articles {
-    padding: 8rem 0;
-    background: transparent;
-    position: relative;
+    padding: 4rem 2rem 6rem;
+    background: #F9FAFB;
 }
 
 .featured-articles h2 {
     text-align: center;
-    margin-bottom: 4rem;
     font-size: 2.8rem;
-    color: white;
-    font-weight: 700;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    font-weight: 800;
+    color: #2563EB;
+    margin-bottom: 3rem;
 }
 
 .featured-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-/* Premium Glassmorphism Featured Cards */
 .featured-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(25px);
-    border-radius: 24px;
+    background: white;
+    border-radius: 20px;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.1);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
     cursor: pointer;
-}
-
-.featured-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        rgba(255, 255, 255, 0.3),
-        transparent
-    );
-    transition: left 0.6s ease;
-    z-index: 1;
-}
-
-.featured-card:hover::before {
-    left: 100%;
+    border: 1px solid #E5E7EB;
 }
 
 .featured-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.25),
-        0 8px 32px rgba(255, 255, 255, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 60px rgba(59, 130, 246, 0.2);
+    border-color: #3B82F6;
 }
 
 .card-image {
-    height: 220px;
+    height: 200px;
     overflow: hidden;
     position: relative;
-    z-index: 2;
 }
 
 .card-image img {
@@ -188,460 +135,260 @@ VITALDEX - GLASSMORPHISM BLOG STYLESHEET
     height: 100%;
     object-fit: cover;
     transition: transform 0.4s ease;
-    filter: brightness(0.9);
 }
 
 .featured-card:hover .card-image img {
-    transform: scale(1.08);
-    filter: brightness(1);
+    transform: scale(1.05);
 }
 
 .card-content {
     padding: 2rem;
-    position: relative;
-    z-index: 2;
 }
 
-/* Enhanced Category Tags */
-.category {
+.card-content .category {
     display: inline-block;
-    background: rgba(33, 150, 243, 0.2);
-    backdrop-filter: blur(10px);
-    color: #64B5F6;
-    padding: 0.5rem 1rem;
+    background: #DBEAFE;
+    color: #2563EB;
+    padding: 0.3rem 1rem;
     border-radius: 20px;
     font-size: 0.85rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    border: 1px solid rgba(100, 181, 246, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    transition: all 0.3s ease;
-}
-
-.featured-card:hover .category {
-    background: rgba(33, 150, 243, 0.3);
-    color: white;
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: scale(1.05);
+    font-weight: 600;
+    margin-bottom: 1rem;
 }
 
 .card-content h3 {
+    font-size: 1.5rem;
     margin-bottom: 1rem;
-    font-size: 1.4rem;
-    line-height: 1.4;
+    color: #1F2937;
     font-weight: 700;
-}
-
-.card-content h3 a {
-    color: white;
-    text-decoration: none;
-    transition: all 0.3s ease;
-}
-
-.card-content h3 a:hover {
-    color: #64B5F6;
-    text-shadow: 0 2px 8px rgba(100, 181, 246, 0.3);
+    line-height: 1.3;
 }
 
 .card-content p {
-    color: rgba(255, 255, 255, 0.85);
-    line-height: 1.7;
+    color: #6B7280;
+    line-height: 1.6;
     margin-bottom: 1.5rem;
-    font-size: 1rem;
 }
 
-.article-meta {
+.card-meta {
     display: flex;
-    gap: 1.5rem;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: #9CA3AF;
     align-items: center;
 }
 
-.article-meta span {
+.card-meta span {
     display: flex;
     align-items: center;
     gap: 0.3rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
-    padding: 0.3rem 0.8rem;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.article-meta span::before {
-    content: '📅';
-    font-size: 0.8rem;
-}
-
-.article-meta span:nth-child(2)::before {
-    content: '⏱️';
-}
-
-/* Blog Main Layout */
+/* Blog Main Content */
 .blog-main {
-    padding: 6rem 0;
-}
-
-.blog-layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 4rem;
-    align-items: start;
 }
 
-.articles-grid h2 {
-    margin-bottom: 3rem;
-    font-size: 2.2rem;
-    color: white;
-    font-weight: 700;
-}
-
-/* Blog Cards with Glassmorphism */
-.blog-card {
+.articles-list {
     display: flex;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.blog-card {
+    background: white;
+    border-radius: 16px;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    margin-bottom: 2.5rem;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-}
-
-.blog-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.blog-card:hover::after {
-    opacity: 1;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1);
+    display: flex;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid #E5E7EB;
 }
 
 .blog-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.15);
+    border-color: #3B82F6;
 }
 
-.blog-card .card-image {
+.blog-card img {
     width: 200px;
     height: 150px;
-    flex-shrink: 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.blog-card .card-image img {
-    width: 100%;
-    height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
-    filter: brightness(0.9);
+    flex-shrink: 0;
 }
 
-.blog-card:hover .card-image img {
-    transform: scale(1.05);
-    filter: brightness(1);
-}
-
-.blog-card .card-content {
+.blog-card-content {
+    padding: 1.5rem 2rem;
     flex: 1;
-    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.blog-card .card-content h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.8rem;
-    color: white;
+.blog-card-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.75rem;
+    color: #1F2937;
     font-weight: 700;
 }
 
-.blog-card .card-content h3 a {
-    color: white;
+.blog-card-content p {
+    color: #6B7280;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.blog-card-content .read-more {
+    color: #3B82F6;
+    font-weight: 600;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.blog-card .card-content h3 a:hover {
-    color: #64B5F6;
+.blog-card-content .read-more:hover {
+    color: #2563EB;
 }
 
-.blog-card .card-content p {
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.6;
-    margin-bottom: 1rem;
-}
-
-/* Glassmorphism Sidebar */
+/* Blog Sidebar */
 .blog-sidebar {
-    padding: 0;
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.1);
+    height: fit-content;
+    position: sticky;
+    top: 100px;
+    border: 1px solid #E5E7EB;
 }
 
 .sidebar-widget {
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(20px);
-    border-radius: 20px;
-    padding: 2.5rem;
-    margin-bottom: 2.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    margin-bottom: 2rem;
 }
 
-.sidebar-widget:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25);
-    transform: translateY(-3px);
+.sidebar-widget:last-child {
+    margin-bottom: 0;
 }
 
 .sidebar-widget h3 {
-    margin-bottom: 2rem;
-    color: white;
     font-size: 1.3rem;
+    color: #2563EB;
+    margin-bottom: 1rem;
     font-weight: 700;
-    text-align: center;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #DBEAFE;
 }
 
-.category-list, .tools-list {
+.sidebar-widget ul {
     list-style: none;
     padding: 0;
 }
 
-.category-list li, .tools-list li {
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+.sidebar-widget li {
+    margin-bottom: 0.75rem;
 }
 
-.category-list li:last-child, .tools-list li:last-child {
-    border-bottom: none;
-}
-
-.category-list li:hover, .tools-list li:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 8px;
-    padding-left: 1.5rem;
-    margin: 0 -0.5rem;
-}
-
-.category-list a, .tools-list a {
-    color: rgba(255, 255, 255, 0.8);
+.sidebar-widget a {
+    color: #4B5563;
     text-decoration: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     transition: all 0.3s ease;
-    font-weight: 500;
+    display: block;
+    padding: 0.5rem 0;
+    border-radius: 4px;
 }
 
-.category-list a:hover, .tools-list a:hover {
-    color: #64B5F6;
-    text-decoration: none;
+.sidebar-widget a:hover {
+    color: #2563EB;
+    background: #F3F4F6;
+    padding-left: 0.5rem;
 }
 
-.category-list span {
-    background: rgba(100, 181, 246, 0.2);
-    color: #64B5F6;
-    padding: 0.3rem 0.8rem;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    border: 1px solid rgba(100, 181, 246, 0.3);
-}
-
-/* Enhanced Health Tips */
-.health-tips {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.tip-item {
-    padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(10px);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-left: 4px solid #64B5F6;
-    transition: all 0.3s ease;
-}
-
-.tip-item:hover {
-    background: rgba(255, 255, 255, 0.12);
-    transform: translateX(8px);
-    border-left-color: #42A5F5;
-}
-
-.tip-item h4 {
-    margin-bottom: 0.8rem;
-    color: white;
-    font-size: 1rem;
-    font-weight: 700;
-}
-
-.tip-item p {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.8);
-    line-height: 1.6;
-    margin: 0;
-}
-
-/* Glassmorphism Newsletter */
+/* Newsletter Section */
 .newsletter-signup {
-    background: linear-gradient(135deg, #2196F3 0%, #21CBF3 100%);
+    background: #3B82F6;
     color: white;
-    padding: 6rem 0;
+    padding: 4rem 2rem;
     text-align: center;
-    position: relative;
-    overflow: hidden;
+    border-radius: 20px;
+    margin: 4rem auto 0;
+    max-width: 800px;
+    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.3);
 }
 
-.newsletter-signup::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
-    animation: newsletterFloat 18s ease-in-out infinite alternate;
-}
-
-@keyframes newsletterFloat {
-    0% { transform: scale(1) rotate(0deg); }
-    100% { transform: scale(1.05) rotate(1deg); }
-}
-
-.newsletter-content {
-    position: relative;
-    z-index: 2;
-}
-
-.newsletter-content h2 {
-    margin-bottom: 1.5rem;
+.newsletter-signup h2 {
     font-size: 2.5rem;
+    margin-bottom: 1rem;
     font-weight: 800;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.newsletter-content p {
-    margin-bottom: 3rem;
+.newsletter-signup p {
     font-size: 1.2rem;
-    opacity: 0.95;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-bottom: 2rem;
+    opacity: 0.9;
 }
 
 .newsletter-form {
+    max-width: 500px;
+    margin: 0 auto;
     display: flex;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 25px;
+    border-radius: 50px;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease;
-}
-
-.newsletter-form:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
 .newsletter-form input {
     flex: 1;
-    padding: 1.2rem 2rem;
     border: none;
-    background: transparent;
+    padding: 1rem 1.5rem;
     font-size: 1rem;
     outline: none;
-    color: white;
-    font-weight: 500;
 }
 
 .newsletter-form input::placeholder {
-    color: rgba(255, 255, 255, 0.8);
+    color: #9CA3AF;
 }
 
 .newsletter-form button {
-    background: rgba(25, 118, 210, 0.8);
-    backdrop-filter: blur(10px);
-    color: white;
+    background: #1D4ED8;
     border: none;
-    padding: 1.2rem 2.5rem;
+    color: white;
+    padding: 0 2rem;
     cursor: pointer;
     font-weight: 700;
-    transition: all 0.3s ease;
-    border-left: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 1rem;
+    transition: background 0.3s ease;
 }
 
 .newsletter-form button:hover {
-    background: rgba(25, 118, 210, 1);
-    transform: scale(1.05);
+    background: #1E40AF;
 }
 
-.privacy-note {
-    font-size: 0.9rem;
-    opacity: 0.8;
-    max-width: 500px;
-    margin: 0 auto;
-}
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .featured-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+    }
 
-/* Enhanced Responsive Design */
-@media (max-width: 968px) {
-    .blog-layout {
+    .blog-main {
         grid-template-columns: 1fr;
         gap: 3rem;
     }
 
-    .featured-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-
-    .blog-card {
-        flex-direction: column;
-    }
-
-    .blog-card .card-image {
-        width: 100%;
-        height: 200px;
-    }
-
-    .search-box, .newsletter-form {
-        flex-direction: column;
-        border-radius: 16px;
-    }
-
-    .search-box button, .newsletter-form button {
-        border-radius: 0 0 16px 16px;
-        border-left: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    .blog-sidebar {
+        position: static;
+        top: auto;
     }
 }
 
 @media (max-width: 768px) {
     .blog-hero {
-        padding: 4rem 0;
+        padding: 4rem 1rem 3rem;
     }
 
     .blog-hero h1 {
@@ -652,128 +399,78 @@ VITALDEX - GLASSMORPHISM BLOG STYLESHEET
         font-size: 1.1rem;
     }
 
-    .featured-articles {
-        padding: 4rem 0;
-    }
-
-    .featured-articles h2 {
-        font-size: 2.2rem;
-    }
-
-    .blog-main {
-        padding: 4rem 0;
-    }
-
-    .blog-layout {
-        gap: 2rem;
-    }
-
-    .sidebar-widget {
-        padding: 2rem;
-    }
-
-    .newsletter-signup {
-        padding: 4rem 0;
-    }
-
-    .newsletter-content h2 {
-        font-size: 2rem;
-    }
-
     .featured-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
-    .featured-card {
-        border-radius: 20px;
+    .blog-card {
+        flex-direction: column;
+    }
+
+    .blog-card img {
+        width: 100%;
+        height: 200px;
+    }
+
+    .search-box {
+        margin: 1rem auto 3rem;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .newsletter-form input {
+        margin-bottom: 1rem;
+    }
+
+    .newsletter-form button {
+        padding: 1rem;
     }
 }
 
 @media (max-width: 480px) {
-    .blog-hero {
-        padding: 3rem 0;
+    .featured-articles {
+        padding: 3rem 1rem;
     }
 
-    .blog-hero h1 {
-        font-size: 2rem;
+    .blog-main {
+        padding: 3rem 1rem;
     }
 
-    .featured-articles,
-    .blog-main,
     .newsletter-signup {
-        padding: 3rem 0;
+        padding: 3rem 1rem;
+        margin: 3rem 1rem 0;
     }
 
-    .card-content {
-        padding: 1.5rem;
-    }
-
-    .blog-card .card-content {
-        padding: 1.5rem;
-    }
-
-    .sidebar-widget {
-        padding: 1.5rem;
-    }
-
-    .article-meta {
-        flex-direction: column;
-        gap: 0.8rem;
-        align-items: flex-start;
-    }
-
-    .search-box, .newsletter-form {
-        margin: 0 1rem;
-    }
-}
-
-/* Animation Keyframes */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .newsletter-signup h2 {
+        font-size: 2rem;
     }
 }
 
 /* Accessibility Enhancements */
 @media (prefers-reduced-motion: reduce) {
-    .featured-card,
-    .blog-card,
-    .sidebar-widget,
-    .tip-item,
-    .search-box,
-    .newsletter-form {
-        transition: none;
-        animation: none;
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 
-    .blog-hero::before,
-    .newsletter-signup::before {
+    .blog-hero::before {
         animation: none;
-    }
-
-    .featured-card:hover,
-    .blog-card:hover {
-        transform: none;
     }
 }
 
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-    .featured-card,
-    .blog-card,
-    .sidebar-widget {
-        border: 2px solid rgba(255, 255, 255, 0.8);
-        background: rgba(255, 255, 255, 0.2);
-    }
-
-    .search-box,
-    .newsletter-form {
-        border: 2px solid rgba(255, 255, 255, 0.8);
-        background: rgba(255, 255, 255, 0.2);
-    }
+/* Focus States for Accessibility */
+.featured-card:focus,
+.blog-card:focus,
+.search-box input:focus,
+.search-box button:focus,
+.newsletter-form input:focus,
+.newsletter-form button:focus {
+    outline: 2px solid #3B82F6;
+    outline-offset: 2px;
 }
